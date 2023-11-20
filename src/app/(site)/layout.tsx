@@ -3,7 +3,7 @@ import React from 'react'
 
 const HomePageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main>
+    <main className='overflow-hidden'>
       <Header />
       {children}
     </main>

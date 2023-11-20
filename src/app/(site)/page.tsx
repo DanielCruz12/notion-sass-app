@@ -1,9 +1,14 @@
 import React, { Fragment } from 'react'
 import Image from 'next/image'
+import clsx from 'clsx'
+import { twMerge } from 'tailwind-merge'
 import Banner from '../../../public/appBanner.png'
 import Cal from '../../../public/cal.png'
 import TitleSection from '@/components/lading-page/title-section'
-import { CLIENTS } from '@/lib/constants/constants'
+import { CLIENTS, TWEETS } from '@/lib/constants/constants'
+import CustomCard from '@/components/lading-page/custom-card'
+/* import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CardDescription, CardTitle } from '@/components/ui/card' */
 
 const HomePage = () => {
   return (
@@ -15,7 +20,7 @@ const HomePage = () => {
           With AI at your side.'
           subheading='Notion is the connected workspace where better, faster work happens.'
         />
-        <div className='mt-6 rounded-xl bg-white bg-gradient-to-r from-secondary to-blue-800 p-[2px]  sm:w-[300px] '>
+        <div className='mt-6 rounded-xl bg-white bg-gradient-to-r from-secondary to-blue-800 p-[2px] sm:w-[300px] '>
           <button className='w-full rounded-[10px] bg-background p-2 text-2xl '>
             Get cypress free
           </button>
@@ -64,9 +69,9 @@ const HomePage = () => {
         '
         >
           {/* //* linear infinite scroll x animation */}
-          {[...Array(2)].map((arr) => (
+          {[...Array(2)].map((arr, idx) => (
             <div
-              key={arr}
+              key={idx}
               className='animate-slide flex flex-nowrap overflow-hidden'
             >
               {CLIENTS.map((client) => (
@@ -75,6 +80,7 @@ const HomePage = () => {
                   className=' relative m-20 flex w-[200px] shrink-0 items-center'
                 >
                   <Image
+                    priority
                     src={client.logo}
                     alt={client.alt}
                     width={150}
@@ -86,6 +92,7 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+      {/* //* calendar component */}
       <section
         className='relative
         flex
@@ -126,9 +133,11 @@ const HomePage = () => {
           sm:ml-0
         '
         >
-          <Image src={Cal} alt='Banner' className='rounded-2xl' />
+          <Image priority src={Cal} alt='Banner' className='rounded-2xl' />
         </div>
       </section>
+
+      {/* //*users component */}
       <section
         className='relative
         flex
@@ -154,8 +163,56 @@ const HomePage = () => {
         <TitleSection
           title='Trusted by all'
           subheading='Capture your ideas, thoughts, and meeting notes in a structured and organized manner.'
-          pill='Features'
+          pill='Testimonials'
         />
+
+        {[...Array(1)].map((arr, idx) => (
+          <div
+            key={idx}
+            className={twMerge(
+              clsx('mt-10 flex flex-nowrap gap-6 self-start overflow-hidden', {
+                'flex-row-reverse': idx === 1,
+                'animate-[slide_250s_linear_infinite]': true,
+                'animate-[slide_250s_linear_infinite_reverse]': idx === 1,
+                'ml-[100vw]': idx === 1,
+              }),
+              'hover:paused'
+            )}
+          >
+            {TWEETS.map((testimonial) => (
+              <CustomCard
+                key={testimonial.name}
+                idTweet={testimonial.idTweet}
+                className='w-[450px] rounded-xl dark:bg-gradient-to-t dark:from-border dark:to-background '
+              /*   cardHeader={
+                  <div className='flex items-center gap-4'>
+                    <Avatar>
+                      <AvatarImage
+                        src={`https://randomuser.me/api/portraits/men/${
+                          index + 1
+                        }.jpg`}
+                      />
+                      <AvatarFallback>AV</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle className='text-foreground'>
+                        {testimonial.name}
+                      </CardTitle>
+                      <CardDescription className='dark:text-washed-purple-800'>
+                        {testimonial.name.toLocaleLowerCase()}
+                      </CardDescription>
+                    </div>
+                  </div>
+                }
+                cardContent={
+                  <p className='dark:text-washed-purple-800'>
+                    {testimonial.message}
+                  </p>
+                } */
+              />
+            ))}
+          </div>
+        ))}
       </section>
     </Fragment>
   )
