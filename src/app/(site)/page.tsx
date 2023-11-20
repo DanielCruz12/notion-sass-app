@@ -184,7 +184,7 @@ const HomePage = () => {
                 key={testimonial.name}
                 idTweet={testimonial.idTweet}
                 className='w-[450px] rounded-xl dark:bg-gradient-to-t dark:from-border dark:to-background '
-              /*   cardHeader={
+                /*   cardHeader={
                   <div className='flex items-center gap-4'>
                     <Avatar>
                       <AvatarImage
@@ -213,6 +213,16 @@ const HomePage = () => {
             ))}
           </div>
         ))}
+      </section>
+      <section className='mt-20 px-4 sm:px-6'>
+        <TitleSection
+          title='Trusted by all'
+          subheading='Capture your ideas, thoughts, and meeting notes in a structured and organized manner.'
+          pill='Testimonials'
+        />
+        <div className='mt-10 flex flex-col-reverse items-center justify-center gap-4 sm:flex-row sm:items-stretch'>
+          
+        </div>
       </section>
     </Fragment>
   )
