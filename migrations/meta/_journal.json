@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1700197444506,
+      "tag": "0000_mysterious_ultragirl",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1700197833396,
+      "tag": "0001_wide_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1700251101185,
+      "tag": "0002_glossy_clea",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1700252828688,
+      "tag": "0003_spicy_mister_sinister",
+      "breakpoints": true
+    }
+  ]
+}
