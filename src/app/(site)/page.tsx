@@ -279,12 +279,10 @@ const HomePage = () => {
                 <ul className='mb-2 flex flex-col gap-4 font-normal'>
                   <small className=''>{card.highlightFeature}</small>
                   {card.freatures.map((feature, idx) => (
-                    <>
-                      <li key={idx} className='flex items-center gap-2'>
-                        <Image src={Icon} alt='Check Icon' />
-                        {feature}
-                      </li>
-                    </>
+                    <li key={idx} className='flex items-center gap-2'>
+                      <Image src={Icon} alt='Check Icon' />
+                      {feature}
+                    </li>
                   ))}
                 </ul>
               }
