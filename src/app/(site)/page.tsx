@@ -3,10 +3,19 @@ import Image from 'next/image'
 import clsx from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import Banner from '../../../public/appBanner.png'
+import Icon from '../../../public/icons/check.svg'
+import Diamond from '../../../public/icons/diamond.svg'
 import Cal from '../../../public/cal.png'
 import TitleSection from '@/components/lading-page/title-section'
-import { CLIENTS, TWEETS } from '@/lib/constants/constants'
+import {
+  CLIENTS,
+  PRICING_CARDS,
+  PRICING_PLANS,
+  TWEETS,
+} from '@/lib/constants/constants'
 import CustomCard from '@/components/lading-page/custom-card'
+import { CardContent, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 /* import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { CardDescription, CardTitle } from '@/components/ui/card' */
 
@@ -166,14 +175,14 @@ const HomePage = () => {
           pill='Testimonials'
         />
 
-        {[...Array(1)].map((arr, idx) => (
+        {[...Array(2)].map((arr, idx) => (
           <div
             key={idx}
             className={twMerge(
               clsx('mt-10 flex flex-nowrap gap-6 self-start overflow-hidden', {
                 'flex-row-reverse': idx === 1,
-                'animate-[slide_250s_linear_infinite]': true,
-                'animate-[slide_250s_linear_infinite_reverse]': idx === 1,
+                'animate-[slide_80s_linear_infinite]': true,
+                'animate-[slide_80s_linear_infinite_reverse]': idx === 1,
                 'ml-[100vw]': idx === 1,
               }),
               'hover:paused'
@@ -216,13 +225,83 @@ const HomePage = () => {
       </section>
       <section className='mt-20 px-4 sm:px-6'>
         <TitleSection
-          title='Trusted by all'
-          subheading='Capture your ideas, thoughts, and meeting notes in a structured and organized manner.'
-          pill='Testimonials'
+          pill='Pricing'
+          title='Pay once, use forever, upgrade '
+          subheading='Flexible pricing for any team size. Its a one-time payment you only buy a
+          license once, and all future updates are free for you forever.'
         />
         <div className='mt-10 flex flex-col-reverse items-center justify-center gap-4 sm:flex-row sm:items-stretch'>
-          
+          {PRICING_CARDS.map((card) => (
+            <CustomCard
+              key={card.planType}
+              className={clsx(
+                'background-blur-3xl relative w-[300px] rounded-2xl dark:bg-black/40',
+                {
+                  'border-gray-300': card.planType === PRICING_PLANS.proplan,
+                }
+              )}
+              cardHeader={
+                <CardTitle
+                  className='text-2xl
+                  font-semibold
+              '
+                >
+                  <div className='flex'>
+                    {card.planType === PRICING_PLANS.proplan && (
+                      <Image
+                        src={Diamond}
+                        alt='Pro Plan Icon'
+                        className=' right-6 top-6'
+                      />
+                    )}
+                    <p className='px-3'>{card.planType}</p>
+                  </div>
+                </CardTitle>
+              }
+              cardContent={
+                <CardContent className='p-0'>
+                  <span className='text-2xl font-normal'>${card.price}</span>
+                  {+card.price > 0 ? (
+                    <span className='ml-1 dark:text-gray-600'>{'/mo'}</span>
+                  ) : null}
+                  <p className='dark:text-gray-300 '>{card.description}</p>
+                  <Button
+                    variant='outline'
+                    className='mt-4 w-full whitespace-nowrap rounded-xl'
+                  >
+                    {card.planType === PRICING_PLANS.proplan
+                      ? 'Go Pro'
+                      : 'Get Started'}
+                  </Button>
+                </CardContent>
+              }
+              cardFooter={
+                <ul className='mb-2 flex flex-col gap-4 font-normal'>
+                  <small className=''>{card.highlightFeature}</small>
+                  {card.freatures.map((feature, idx) => (
+                    <>
+                      <li key={idx} className='flex items-center gap-2'>
+                        <Image src={Icon} alt='Check Icon' />
+                        {feature}
+                      </li>
+                    </>
+                  ))}
+                </ul>
+              }
+            ></CustomCard>
+          ))}
         </div>
+        <div
+          className='
+          relative
+          -z-10
+          h-20
+          w-full
+          items-center
+          rounded-full
+          bg-blue-800
+          blur-[120px]'
+        ></div>
       </section>
     </Fragment>
   )
