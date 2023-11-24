@@ -2,10 +2,10 @@ import React, { Fragment } from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import Banner from '../../../public/appBanner.png'
+import Banner from '../../../public/image.png'
+import Cal from '../../../public/movil.png'
 import Icon from '../../../public/icons/check.svg'
 import Diamond from '../../../public/icons/diamond.svg'
-import Cal from '../../../public/cal.png'
 import TitleSection from '@/components/lading-page/title-section'
 import {
   CLIENTS,
@@ -29,24 +29,23 @@ const HomePage = () => {
           With AI at your side.'
           subheading='Notion is the connected workspace where better, faster work happens.'
         />
-        <div className='mt-6 rounded-xl bg-white bg-gradient-to-r from-secondary to-blue-800 p-[2px] sm:w-[300px] '>
-          <button className='w-full rounded-[10px] bg-background p-2 text-2xl '>
-            Get cypress free
-          </button>
+        <div className='flex items-center justify-center text-center'>
+          <div className='mt-6  w-10/12  rounded-xl bg-white bg-gradient-to-r from-secondary to-blue-800 p-[2px] sm:w-[300px] '>
+            <button className='w-full rounded-[10px] bg-background p-2 text-2xl '>
+              Get Daniel´s app
+            </button>
+          </div>
         </div>
         <div
           className='relative
-          ml-[-50px]
-          mt-[-40px]
           flex
-          w-[750px]
+         
           items-center
           justify-center
-          sm:ml-0
-          sm:w-full
-          md:mt-[-90px]'
+          rounded-lg
+          sm:ml-0 sm:w-full '
         >
-          <Image src={Banner} alt='banner' />
+          <Image className='rounded-xl pt-3  ' src={Banner} alt='banner' />
           {/* //* shadow effect for banner  */}
           <div className='absolute bottom-0 left-0 right-0 top-[50%] z-10 bg-gradient-to-t dark:from-background '></div>
         </div>
@@ -142,7 +141,7 @@ const HomePage = () => {
           sm:ml-0
         '
         >
-          <Image priority src={Cal} alt='Banner' className='rounded-2xl' />
+          <Image priority height={700} src={Cal} alt='Banner' className='rounded-2xl' />
         </div>
       </section>
 
