@@ -45,7 +45,7 @@ const HomePage = () => {
           rounded-lg
           sm:ml-0 sm:w-full '
         >
-          <Image className='rounded-xl pt-3  ' src={Banner} alt='banner' />
+          <Image className='rounded-3xl pt-3 mt-4 ' src={Banner} alt='banner' />
           {/* //* shadow effect for banner  */}
           <div className='absolute bottom-0 left-0 right-0 top-[50%] z-10 bg-gradient-to-t dark:from-background '></div>
         </div>
