@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { MailCheck } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { FormSchema } from '@/lib/types/types'
 import { Button } from '@/components/ui/button'
@@ -38,7 +37,6 @@ const SignUpFormSchema = z
     path: ['ConfirmPassword'],
   })
 const SignUp = () => {
-  const navigate = useRouter()
   const searchParams = useSearchParams()
   const [confirmation, setConfirmation] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -76,7 +74,6 @@ const SignUp = () => {
     setConfirmation(true)
   }
 
-  console.log(navigate)
 
   return (
     <Form {...form}>
@@ -99,7 +96,7 @@ const SignUp = () => {
           disabled={isLoading}
           control={form.control}
           name='email'
-          render={(field) => (
+          render={({field}) => (
             <FormItem>
               <FormControl>
                 <Input type='email' placeholder='email' {...field} />
@@ -112,7 +109,7 @@ const SignUp = () => {
           disabled={isLoading}
           control={form.control}
           name='password'
-          render={(field) => (
+          render={({field}) => (
             <FormItem>
               <FormControl>
                 <Input type='password' placeholder='password' {...field} />
@@ -125,7 +122,7 @@ const SignUp = () => {
           disabled={isLoading}
           control={form.control}
           name='confirmPassword'
-          render={(field) => (
+          render={({field}) => (
             <FormItem>
               <FormControl>
                 <Input
