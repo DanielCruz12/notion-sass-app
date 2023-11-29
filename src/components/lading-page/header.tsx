@@ -33,7 +33,9 @@ const Header = () => {
    */
   return (
     <header className='flex items-center justify-between p-4 '>
-      <aside>Daniel{'´'}s app</aside>
+      <aside>
+        <Link href={'/'}>Daniel{'´'}s app</Link>
+      </aside>
       <NavigationMenu className='flex items-center justify-center'>
         <NavigationMenuList>
           <NavigationMenuItem>

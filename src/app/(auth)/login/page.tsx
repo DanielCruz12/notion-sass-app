@@ -53,17 +53,17 @@ const LoginPage = () => {
         className='flex w-full flex-col space-y-6 sm:w-[400px] sm:justify-center'
       >
         <Link className='justify-left flex w-full items-center' href={'/'}>
-          Go
+          Logo
         </Link>
+        <h3 className='font-bold text-gray-300'>Welcome Back! 👋</h3>
         <FormDescription className='py-2 text-gray-400'>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          Exercitationem, maxime ducimus eius eligendi provident fuga.
+          Sign in to your account to continue. Enter your credentials below.
         </FormDescription>
         <FormField
           disabled={isLoading}
           control={form.control}
           name='email'
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Input type='email' placeholder='email' {...field} />
@@ -76,7 +76,7 @@ const LoginPage = () => {
           disabled={isLoading}
           control={form.control}
           name='password'
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Input type='password' placeholder='password' {...field} />

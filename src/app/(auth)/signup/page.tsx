@@ -74,7 +74,6 @@ const SignUp = () => {
     setConfirmation(true)
   }
 
-
   return (
     <Form {...form}>
       <form
@@ -88,72 +87,11 @@ const SignUp = () => {
           Logo
         </Link>
         <FormDescription className='py-2 text-gray-400'>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          Exercitationem, maxime ducimus eius eligendi provident fuga.
+          Welcome! Join our community by creating your account. Fill in the
+          details below to get started.
         </FormDescription>
 
-        <FormField
-          disabled={isLoading}
-          control={form.control}
-          name='email'
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input type='email' placeholder='email' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          disabled={isLoading}
-          control={form.control}
-          name='password'
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input type='password' placeholder='password' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          disabled={isLoading}
-          control={form.control}
-          name='confirmPassword'
-          render={({field}) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type='password'
-                  placeholder='Confirm password'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {submitError && <FormMessage>{submitError}</FormMessage>}
-        {!confirmation && !consExChangeError && (
-          <Button
-            type='submit'
-            className='w-full rounded-lg p-6'
-            variant='secondary'
-            disabled={isLoading}
-          >
-            {!isLoading ? 'Create Account' : <Loader />}
-          </Button>
-        )}
-
-        <span className='self-center'>
-          Already have an account?{' '}
-          <Link className='text-primary' href={'/login'}>
-            Login
-          </Link>
-        </span>
-        {(confirmation || consExChangeError) ? (
+        {confirmation || consExChangeError ? (
           <>
             <Alert className={confirmationAndErrorStyles}>
               {!consExChangeError && <MailCheck className='h-4 w-4' />}
@@ -165,7 +103,75 @@ const SignUp = () => {
               </AlertDescription>
             </Alert>
           </>
-        ) : null}
+        ) : (
+          <>
+            <FormField
+              disabled={isLoading}
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type='email' placeholder='email' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              disabled={isLoading}
+              control={form.control}
+              name='password'
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type='password' placeholder='password' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              disabled={isLoading}
+              control={form.control}
+              name='confirmPassword'
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type='password'
+                      placeholder='Confirm password'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {submitError && <FormMessage>{submitError}</FormMessage>}
+            {!confirmation && !consExChangeError && (
+              <Button
+                type='submit'
+                className='w-full rounded-lg p-6'
+                variant='secondary'
+                disabled={isLoading}
+              >
+                {!isLoading ? 'Create Account' : <Loader />}
+              </Button>
+            )}
+          </>
+        )}
+
+        <span className='self-center'>
+          Already have an account?{' '}
+          <Link className='text-primary' href={'/login'}>
+            Login
+          </Link>
+        </span>
+
+        <FormDescription className='text-center text-gray-500'>
+          Terms of Service and Privacy Policy.
+        </FormDescription>
       </form>
     </Form>
   )
