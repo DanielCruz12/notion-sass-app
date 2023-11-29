@@ -1,7 +1,11 @@
 import Header from '@/components/lading-page/header'
 import React from 'react'
 
-const HomePageLayout = ({ children }: { children: React.ReactNode }) => {
+type HomePageLayoutProps = {
+  children: React.ReactNode
+}
+
+const HomePageLayout: React.FC<HomePageLayoutProps> = ({ children }) => {
   return (
     <main className='overflow-hidden'>
       <Header />

@@ -153,7 +153,7 @@ const SignUp = () => {
             Login
           </Link>
         </span>
-        {(confirmation || consExChangeError) && (
+        {(confirmation || consExChangeError) ? (
           <>
             <Alert className={confirmationAndErrorStyles}>
               {!consExChangeError && <MailCheck className='h-4 w-4' />}
@@ -165,7 +165,7 @@ const SignUp = () => {
               </AlertDescription>
             </Alert>
           </>
-        )}
+        ) : null}
       </form>
     </Form>
   )
