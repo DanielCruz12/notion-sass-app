@@ -39,8 +39,8 @@ const LoginPage = () => {
     if (error) {
       form.reset()
       setSubmitError(error.message)
-      router.replace('/dashboard')
     }
+    router.replace('/dashboard')
   }
 
   return (
