@@ -15,7 +15,7 @@ import { Subscription } from '@/lib/supabase/supabase.types'
 
 type DashboardSetupProps = {
   user: AuthUser
-  subscription: { status: Subscription }
+  subscription: Subscription | null
 }
 const DashboardSetup: React.FC<DashboardSetupProps> = ({ subscription }) => {
   const [selectedEmoji, setSelectedEmoji] = useState('💼')
