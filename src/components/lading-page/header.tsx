@@ -63,14 +63,14 @@ const Header = () => {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <aside className='flex justify-end gap-1'>
+      <aside className='flex justify-end gap-3'>
         <Link href={'/login'}>
-          <Button variant={'default'} className='px-3 sm:block'>
+          <Button size={'lg'} variant={'default'} className='px-4 sm:block'>
             Login
           </Button>
         </Link>
-        <Link className='px-2' href={'/signup'}>
-          <Button variant={'outline'} className='px-2 sm:block'>
+        <Link href={'/signup'}>
+          <Button size={'lg'} variant={'outline'} className='px-2 sm:block'>
             Sign up
           </Button>
         </Link>
