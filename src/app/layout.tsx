@@ -1,7 +1,9 @@
-import { ThemeProvider } from '@/lib/providers/next-theme-provider'
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
-import { DM_Sans } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/lib/providers/next-theme-provider'
+import { DM_Sans } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
 
 const inter = DM_Sans({ subsets: ['latin'] })

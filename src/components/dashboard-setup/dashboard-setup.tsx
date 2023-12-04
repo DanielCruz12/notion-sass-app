@@ -1,9 +1,11 @@
+'use client'
+
 import { AuthUser } from '@supabase/supabase-js'
 import { Card, CardContent, CardDescription, CardHeader } from '../ui/card'
 
 type DashboardSetupProps = {
-  user?: AuthUser
-  subscription?: {} | null
+  user: AuthUser
+  subscription: {} | null
 }
 const DashboardSetup: React.FC<DashboardSetupProps> = (
   {
@@ -12,9 +14,9 @@ const DashboardSetup: React.FC<DashboardSetupProps> = (
   }
 ) => {
   return (
-    <Card>
+    <Card className='h-screen w-[800px] sm:h-auto '>
       <CardHeader>Create a workspace</CardHeader>
-      <CardDescription>
+      <CardDescription className='px-3'>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, facilis
         et? Ipsa officia atque qui, odio, nisi nesciunt, consectetur alias
         facere repellat enim perferendis veritatis libero. Hic autem odio
