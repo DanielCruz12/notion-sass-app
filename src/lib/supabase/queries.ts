@@ -4,7 +4,7 @@ import { and, eq, notExists } from "drizzle-orm";
 import db from "./db"
 import { Folder, Subscription, workspace } from "./supabase.types"
 import { validate } from 'uuid'
-import { folders, workspaces } from "../../../migrations/schema";
+import { folders, users, workspaces } from "../../../migrations/schema";
 import { collaborators } from './schema'
 export const getUserSuscriptionStatus = async (userId: string) => {
     try {
@@ -51,6 +51,39 @@ export const getPrivateWorkspaces = async (userId: string) => {
         )
         )) as workspace[];
     return privateWorkspaces;
+}
 
+export const getCollaboratoratingWorkspaces = async (userId: string) => {
+    if (!userId) return null
+    const collaboratedWorkspaces = await db.select({
+        id: workspaces.id,
+        createdAt: workspaces.createdAt,
+        workspaceOwner: workspaces.workspaceOwner,
+        title: workspaces.title,
+        iconId: workspaces.iconId,
+        data: workspaces.data,
+        inTrash: workspaces.inTrash,
+        logo: workspaces.logo,
+    }).from(users)
+        .innerJoin(collaborators, eq(users.id, collaborators.id))
+        .innerJoin(workspaces, eq(collaborators.workspaceId, workspaces.id))
+        .where(eq(users.id, userId)) as workspace[]
+    return collaboratedWorkspaces
+}
 
+export const getSharedWorkspaces = async (userId: string) => {
+    if (!userId) return null
+    const sharedWorkspaces = await db.selectDistinct({
+        id: workspaces.id,
+        createdAt: workspaces.createdAt,
+        workspaceOwner: workspaces.workspaceOwner,
+        title: workspaces.title,
+        iconId: workspaces.iconId,
+        data: workspaces.data,
+        inTrash: workspaces.inTrash,
+        logo: workspaces.logo,
+    }).from(workspaces).orderBy(workspaces.createdAt)
+        .innerJoin(collaborators, eq(workspaces.id, collaborators.workspaceId))
+        .where(eq(workspaces.workspaceOwner, userId)) as workspace[]
+    return sharedWorkspaces
 }

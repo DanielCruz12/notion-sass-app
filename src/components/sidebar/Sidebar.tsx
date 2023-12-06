@@ -1,6 +1,14 @@
-import { getFolders, getUserSuscriptionStatus } from '@/lib/supabase/queries'
+import {
+  getCollaboratoratingWorkspaces,
+  getFolders,
+  getPrivateWorkspaces,
+  getSharedWorkspaces,
+  getUserSuscriptionStatus,
+} from '@/lib/supabase/queries'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
+import { twMerge } from 'tailwind-merge'
+import WorkspaceDropdown from './workspace-dropdown'
 /* import { redirect } from 'next/navigation'
  */
 type TSideBarProps = {
@@ -24,13 +32,32 @@ const Sidebar: React.FC<TSideBarProps> = async ({ params }) => {
   /*  if (subscriptionError || foldersError) {
     redirect('/dashboard')
   } */
+  const [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces] =
+    await Promise.all([
+      getPrivateWorkspaces(user.id),
+      getCollaboratoratingWorkspaces(user.id),
+      getSharedWorkspaces(user.id),
+    ])
   console.log(
     subscription,
     workspaceFolderData,
     subscriptionError,
-    foldersError
+    foldersError,
+    privateWorkspaces,
+    collaboratingWorkspaces,
+    sharedWorkspaces
   )
-  return <div>Sidebar</div>
+  return (
+    <aside
+      className={twMerge(
+        'hidden w-[128px] shrink-0 !justify-between p-4 sm:flex sm:flex-col md:gap-4'
+      )}
+    >
+      <div>
+        <WorkspaceDropdown></WorkspaceDropdown>
+      </div>
+    </aside>
+  )
 }
 
 export default Sidebar
