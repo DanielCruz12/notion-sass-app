@@ -32,21 +32,20 @@ const Sidebar: React.FC<TSideBarProps> = async ({ params }) => {
   /*  if (subscriptionError || foldersError) {
     redirect('/dashboard')
   } */
+
+  console.log(
+    subscription,
+    workspaceFolderData,
+    subscriptionError,
+    foldersError
+  )
   const [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces] =
     await Promise.all([
       getPrivateWorkspaces(user.id),
       getCollaboratoratingWorkspaces(user.id),
       getSharedWorkspaces(user.id),
     ])
-  console.log(
-    subscription,
-    workspaceFolderData,
-    subscriptionError,
-    foldersError,
-    privateWorkspaces,
-    collaboratingWorkspaces,
-    sharedWorkspaces
-  )
+
   return (
     <aside
       className={twMerge(
@@ -54,7 +53,16 @@ const Sidebar: React.FC<TSideBarProps> = async ({ params }) => {
       )}
     >
       <div>
-        <WorkspaceDropdown></WorkspaceDropdown>
+        <WorkspaceDropdown
+          sharedWorkspaces={sharedWorkspaces}
+          collaboratingWorkspaces={collaboratingWorkspaces}
+          privateWorkspaces={privateWorkspaces}
+         /*  defaultValue={[
+            ...privateWorkspaces,
+            ...collaboratingWorkspaces,
+            ...sharedWorkspaces,
+          ].find((workspace) => workspace.id === params.workspaceId)} */
+        ></WorkspaceDropdown>
       </div>
     </aside>
   )

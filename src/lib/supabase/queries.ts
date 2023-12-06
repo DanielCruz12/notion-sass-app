@@ -4,7 +4,7 @@ import { and, eq, notExists } from "drizzle-orm";
 import db from "./db"
 import { Folder, Subscription, workspace } from "./supabase.types"
 import { validate } from 'uuid'
-import { folders, users, workspaces } from "../../../migrations/schema";
+import { folders, users, workspaces, files } from "../../../migrations/schema";
 import { collaborators } from './schema'
 export const getUserSuscriptionStatus = async (userId: string) => {
     try {
@@ -86,4 +86,21 @@ export const getSharedWorkspaces = async (userId: string) => {
         .innerJoin(collaborators, eq(workspaces.id, collaborators.workspaceId))
         .where(eq(workspaces.workspaceOwner, userId)) as workspace[]
     return sharedWorkspaces
+}
+
+export const getFiles = async (folderId: any) => {
+    const isValid = validate(folderId);
+    if (!isValid) return { data: null, error: 'Error' };
+    try {
+        const results = (await db
+            .select()
+            .from(files)
+            .orderBy(files.createdAt)
+            .where(eq(files.folderId, folderId)))
+        return { data: results, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: null, error: 'Error' };
+    }
+
 }
