@@ -9,6 +9,7 @@ type EmojiPickerProps = {
 const EmojiPicker: React.FC<EmojiPickerProps> = ({ children, getValue }) => {
   /* const route = useRouter() */
   const Picker = dynamic(() => import('emoji-picker-react'))
+  
   const onClick = (selectEmoji: any) => {
     if (getValue) getValue(selectEmoji.emoji)
   }
