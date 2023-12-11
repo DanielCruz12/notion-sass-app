@@ -76,10 +76,10 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
           className='group
           absolute
           z-50
-          h-[190px]
+         
           w-full
           origin-top-right
-          overflow-scroll
+          overflow-hidden
           rounded-md
           border-[1px]
           border-muted
@@ -88,7 +88,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
           backdrop-blur-lg
       '
         >
-          <div className='flex flex-col rounded-md'>
+          <div className='flex flex-col rounded-md w-full'>
             <div className='!p-2'>
               {!!privateWorkspaces.length && (
                 <>
@@ -143,7 +143,8 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
               gap-2 
               p-2 
               transition-all 
-              hover:bg-muted'
+              hover:bg-muted ' 
+              
               >
                 <article
                   className='flex 

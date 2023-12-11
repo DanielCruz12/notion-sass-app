@@ -2,7 +2,7 @@
 'use client'
 import { AuthUser } from '@supabase/supabase-js'
 import React, { useState } from 'react'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
 
 import { Card, CardContent, CardDescription, CardHeader } from '../ui/card'
@@ -91,6 +91,7 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         title: 'Workspace Created',
         description: `${newWorkspace.title} has been created successfully.`,
       })  */
+      console.log("Workspace Created")
 
       router.replace(`/dashboard/${newWorkspace.id}`)
     } catch (error) {

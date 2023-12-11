@@ -42,7 +42,7 @@ const SelectedWorkspace: React.FC<SelectedWorkspaceProps> = ({
       rounded-md 
       p-2 
       transition-all 
-      hover:bg-muted'
+      hover:bg-muted bg-slate-300'
     >
       <Image
         src={workspaceLogo}

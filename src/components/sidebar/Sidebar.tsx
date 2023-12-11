@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
     >
       pepe
       <div>
-        {/* <WorkspaceDropdown
+        <WorkspaceDropdown
           privateWorkspaces={privateWorkspaces}
           sharedWorkspaces={sharedWorkspaces}
           collaboratingWorkspaces={collaboratingWorkspaces}
@@ -70,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
             ...collaboratingWorkspaces,
             ...sharedWorkspaces,
           ].find((workspace) => workspace.id === params.workspaceId)}
-        /> */}
+        />
         {/*   <PlanUsage
           foldersLength={workspaceFolderData?.length || 0}
           subscription={subscriptionData}
@@ -78,8 +78,8 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
         {/*         <NativeNavigation myWorkspaceId={params.workspaceId} />
          */}{' '}
         <div
-          className='relative h-[450px]
-          overflow-scroll
+          className=' h-[450px]
+          overflow-hidden
         '
         >
           <div
