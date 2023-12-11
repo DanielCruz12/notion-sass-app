@@ -1,24 +1,36 @@
+/* eslint-disable no-unused-vars */
 'use client'
-
-import { z } from 'zod'
-import { useState } from 'react'
-import EmojiPicker from '../global/emoji-picker'
 import { AuthUser } from '@supabase/supabase-js'
-import { Card, CardContent, CardDescription, CardHeader } from '../ui/card'
-import { Input } from '../ui/input'
-import { useForm } from 'react-hook-form'
-import { Button } from '../ui/button'
-import Loader from '../Loader'
-import { Label } from '../ui/label'
-import { CreateWorkspaceFormSchema } from '@/lib/types/types'
-import { Subscription } from '@/lib/supabase/supabase.types'
+import React, { useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import { v4 } from 'uuid'
 
+import { Card, CardContent, CardDescription, CardHeader } from '../ui/card'
+import EmojiPicker from '../global/emoji-picker'
+import { Label } from '../ui/label'
+import { Input } from '../ui/input'
+import { Subscription, workspace } from '@/lib/supabase/supabase.types'
+import { Button } from '../ui/button'
+import { createWorkspace } from '@/lib/supabase/queries'
+/* import { useToast } from '../ui/use-toast';
+ */ import { useRouter } from 'next/navigation'
+import { useAppState } from '@/lib/providers/state-provider'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { z } from 'zod'
+import Loader from '../Loader'
+import { CreateWorkspaceFormSchema } from '@/lib/types/types'
 type DashboardSetupProps = {
   user: AuthUser
   subscription: Subscription | null
 }
-const DashboardSetup: React.FC<DashboardSetupProps> = ({ subscription }) => {
+const DashboardSetup: React.FC<DashboardSetupProps> = ({
+  subscription,
+  user,
+}) => {
   const [selectedEmoji, setSelectedEmoji] = useState('💼')
+  const supabase = createClientComponentClient()
+  const router = useRouter()
+  const { dispatch } = useAppState()
 
   const {
     register,
@@ -29,8 +41,70 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({ subscription }) => {
     defaultValues: { logo: '', workspaceName: '' },
   })
 
-  const onSubmit = (val: any) => {
-    console.log(val)
+  const onSubmit: SubmitHandler<
+    z.infer<typeof CreateWorkspaceFormSchema>
+  > = async (value) => {
+    const file = value.logo?.[0]
+    let filePath = null
+    const workspaceUUID = v4()
+
+    if (file) {
+      try {
+        const { data, error } = await supabase.storage
+          .from('workspace-logos')
+          .upload(`workspaceLogo.${workspaceUUID}`, file, {
+            cacheControl: '3600',
+            upsert: true,
+          })
+        if (error) throw new Error('')
+        filePath = data.path
+      } catch (error) {
+        console.log('Error', error)
+        /*   toast({
+        variant: 'destructive',
+        title: 'Error! Could not upload your workspace logo',
+      }); */
+      }
+    }
+    try {
+      const newWorkspace: any = {
+        data: null,
+        createdAt: new Date().toISOString(),
+        iconId: selectedEmoji,
+        id: workspaceUUID,
+        inTrash: '',
+        title: value.workspaceName,
+        workspaceOwner: user.id,
+        logo: filePath || null,
+        bannerUrl: '',
+      }
+      const { data, error: createError } = await createWorkspace(newWorkspace)
+      if (createError) {
+        throw new Error()
+      }
+      dispatch({
+        type: 'ADD_WORKSPACE',
+        payload: { ...newWorkspace, folders: [] },
+      })
+
+      /*  toast({
+        title: 'Workspace Created',
+        description: `${newWorkspace.title} has been created successfully.`,
+      })  */
+
+      router.replace(`/dashboard/${newWorkspace.id}`)
+    } catch (error) {
+      console.log(error, 'Error')
+      /*      toast({
+        variant: 'destructive',
+        title: 'Could not create your workspace',
+        description:
+          "Oops! Something went wrong, and we couldn't create your workspace. Try again or come back later.",
+      }) */
+    } finally {
+      console.log('finally')
+      /*  reset() */
+    }
   }
 
   return (

@@ -352,7 +352,6 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
 
 export default AppStateProvider;
 
-
 export const useAppState = () => {
   const context = useContext(AppStateContext);
   if (!context) {

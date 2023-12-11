@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-vars */
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import React from 'react'
+
+import { cookies } from 'next/headers'
 import {
   getCollaboratoratingWorkspaces,
   getFolders,
@@ -5,40 +10,40 @@ import {
   getSharedWorkspaces,
   getUserSuscriptionStatus,
 } from '@/lib/supabase/queries'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 import WorkspaceDropdown from './workspace-dropdown'
-/* import { redirect } from 'next/navigation'
+/* import PlanUsage from './plan-usage';
+import NativeNavigation from './native-navigation';
+import { ScrollArea } from '../ui/scroll-area';
+import FoldersDropdownList from './folders-dropdown-list';
+import UserCard from './user-card';
  */
-type TSideBarProps = {
-  params: any
-  classN?: any
+interface SidebarProps {
+  params: { workspaceId: string }
+  className?: string
 }
-const Sidebar: React.FC<TSideBarProps> = async ({ params }) => {
+
+const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
   const supabase = createServerComponentClient({ cookies })
-  //*user
+  //user
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
   if (!user) return
-  const { data: subscription, error: subscriptionError } =
+
+  //subscr
+  const { data: subscriptionData, error: subscriptionError } =
     await getUserSuscriptionStatus(user.id)
 
-  //*folders
+  //folders
   const { data: workspaceFolderData, error: foldersError } = await getFolders(
     params.workspaceId
   )
-  /*  if (subscriptionError || foldersError) {
-    redirect('/dashboard')
-  } */
-
-  console.log(
-    subscription,
-    workspaceFolderData,
-    subscriptionError,
-    foldersError
-  )
+  //error
+  /*    if (subscriptionError || foldersError) redirect('/dashboard')
+   */
   const [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces] =
     await Promise.all([
       getPrivateWorkspaces(user.id),
@@ -46,24 +51,56 @@ const Sidebar: React.FC<TSideBarProps> = async ({ params }) => {
       getSharedWorkspaces(user.id),
     ])
 
+  //get all the different workspaces private collaborating shared
   return (
     <aside
       className={twMerge(
-        'hidden w-[128px] shrink-0 !justify-between p-4 sm:flex sm:flex-col md:gap-4'
+        'hidden w-[280px] shrink-0 !justify-between p-4 sm:flex sm:flex-col md:gap-4',
+        className
       )}
     >
+      pepe
       <div>
-        <WorkspaceDropdown
+        {/* <WorkspaceDropdown
+          privateWorkspaces={privateWorkspaces}
           sharedWorkspaces={sharedWorkspaces}
           collaboratingWorkspaces={collaboratingWorkspaces}
-          privateWorkspaces={privateWorkspaces}
-         /*  defaultValue={[
+          defaultValue={[
             ...privateWorkspaces,
             ...collaboratingWorkspaces,
             ...sharedWorkspaces,
-          ].find((workspace) => workspace.id === params.workspaceId)} */
-        ></WorkspaceDropdown>
+          ].find((workspace) => workspace.id === params.workspaceId)}
+        /> */}
+        {/*   <PlanUsage
+          foldersLength={workspaceFolderData?.length || 0}
+          subscription={subscriptionData}
+        /> */}
+        {/*         <NativeNavigation myWorkspaceId={params.workspaceId} />
+         */}{' '}
+        <div
+          className='relative h-[450px]
+          overflow-scroll
+        '
+        >
+          <div
+            className='pointer-events-none 
+          absolute 
+          bottom-0 
+          z-40 
+          h-20 
+          w-full 
+          bg-gradient-to-t 
+          from-background 
+          to-transparent'
+          />
+          {/* <FoldersDropdownList
+            workspaceFolders={workspaceFolderData || []}
+            workspaceId={params.workspaceId}
+          /> */}
+        </div>
       </div>
+      {/*       <UserCard subscription={subscriptionData} />
+       */}{' '}
     </aside>
   )
 }
