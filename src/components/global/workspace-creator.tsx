@@ -32,7 +32,7 @@ const WorkspaceCreator = () => {
   const [collaborators, setCollaborators] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-/*   const addCollaborator = (user: User) => {
+  /*   const addCollaborator = (user: User) => {
     setCollaborators([...collaborators, user])
   } */
 
@@ -63,7 +63,7 @@ const WorkspaceCreator = () => {
       }
       if (permissions === 'shared') {
         /*         toast({ title: 'Success', description: 'Created the workspace' })
-        */        await createWorkspace(newWorkspace)
+         */ await createWorkspace(newWorkspace)
         /*         await addCollaborators(collaborators, uuid);
          */ router.refresh()
       }

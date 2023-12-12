@@ -2,7 +2,7 @@
 
 import { and, eq, notExists } from "drizzle-orm";
 import db from "./db"
-import { Folder, Subscription, workspace } from "./supabase.types"
+import { Folder, Subscription, User, workspace } from "./supabase.types"
 import { validate } from 'uuid'
 import { folders, users, workspaces, files } from "../../../migrations/schema";
 import { collaborators } from './schema'
@@ -127,4 +127,16 @@ export const getUserSubscriptionStatus = async (userId: string) => {
         console.log(error);
         return { data: null, error: `Error` };
     }
+};
+
+export const addCollaborators = async (users: User[], workspaceId: string) => {
+    const response = users.forEach(async (user: User) => {
+        const userExists = await db.query.collaborators.findFirst({
+            where: (u: any, { eq }) =>
+                and(eq(u.userId, user.id), eq(u.workspaceId, workspaceId)),
+        });
+        if (!userExists)
+            await db.insert(collaborators).values({ workspaceId, userId: user.id });
+    });
+    return response
 };
