@@ -2,43 +2,54 @@
 'use client'
 import { AuthUser } from '@supabase/supabase-js'
 import React, { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { v4 } from 'uuid'
 
-import { Card, CardContent, CardDescription, CardHeader } from '../ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card'
 import EmojiPicker from '../global/emoji-picker'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Subscription, workspace } from '@/lib/supabase/supabase.types'
 import { Button } from '../ui/button'
 import { createWorkspace } from '@/lib/supabase/queries'
-/* import { useToast } from '../ui/use-toast';
- */ import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useAppState } from '@/lib/providers/state-provider'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { z } from 'zod'
-import Loader from '../Loader'
 import { CreateWorkspaceFormSchema } from '@/lib/types/types'
-type DashboardSetupProps = {
+import Loader from '../Loader'
+
+interface DashboardSetupProps {
   user: AuthUser
   subscription: Subscription | null
 }
+
 const DashboardSetup: React.FC<DashboardSetupProps> = ({
   subscription,
   user,
 }) => {
+  /*   const { toast } = useToast();
+   */ const router = useRouter()
+  const { dispatch } = useAppState()
   const [selectedEmoji, setSelectedEmoji] = useState('💼')
   const supabase = createClientComponentClient()
-  const router = useRouter()
-  const { dispatch } = useAppState()
-
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting: isLoading, errors },
   } = useForm<z.infer<typeof CreateWorkspaceFormSchema>>({
     mode: 'onChange',
-    defaultValues: { logo: '', workspaceName: '' },
+    defaultValues: {
+      logo: '',
+      workspaceName: '',
+    },
   })
 
   const onSubmit: SubmitHandler<
@@ -60,23 +71,24 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         filePath = data.path
       } catch (error) {
         console.log('Error', error)
-        /*   toast({
-        variant: 'destructive',
-        title: 'Error! Could not upload your workspace logo',
-      }); */
+        /*  toast({
+          variant: 'destructive',
+          title: 'Error! Could not upload your workspace logo',
+        }); */
       }
     }
     try {
-      const newWorkspace: any = {
-        data: null,
+      const newWorkspace: workspace = {
+        data: '',
+        banner: filePath,
         createdAt: new Date().toISOString(),
         iconId: selectedEmoji,
         id: workspaceUUID,
         inTrash: '',
         title: value.workspaceName,
         workspaceOwner: user.id,
-        logo: filePath || null,
-        bannerUrl: '',
+        logo: filePath,
+        bannerUrl: filePath,
       }
       const { data, error: createError } = await createWorkspace(newWorkspace)
       if (createError) {
@@ -90,30 +102,36 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
       /*  toast({
         title: 'Workspace Created',
         description: `${newWorkspace.title} has been created successfully.`,
-      })  */
-      console.log("Workspace Created")
+      }); */
 
       router.replace(`/dashboard/${newWorkspace.id}`)
     } catch (error) {
       console.log(error, 'Error')
-      /*      toast({
+      /*  toast({
         variant: 'destructive',
         title: 'Could not create your workspace',
         description:
           "Oops! Something went wrong, and we couldn't create your workspace. Try again or come back later.",
-      }) */
+      }); */
     } finally {
-      console.log('finally')
-      /*  reset() */
+      reset()
     }
   }
 
   return (
-    <Card className='h-screen w-[800px] sm:h-auto '>
-      <CardHeader>Create a workspace</CardHeader>
-      <CardDescription className='px-3'>
-        Create your first workspace to start using Notion for your homeworks
-      </CardDescription>
+    <Card
+      className='h-screen
+      w-[800px]
+      sm:h-auto
+  '
+    >
+      <CardHeader>
+        <CardTitle>Create A Workspace</CardTitle>
+        <CardDescription>
+          Lets create a private workspace to get you started.You can add
+          collaborators later from the workspace settings tab.
+        </CardDescription>
+      </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-4'>
@@ -122,7 +140,7 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
             items-center
             gap-4'
             >
-              <div className='pt-4 text-4xl'>
+              <div className='text-5xl'>
                 <EmojiPicker getValue={(emoji) => setSelectedEmoji(emoji)}>
                   {selectedEmoji}
                 </EmojiPicker>
@@ -172,14 +190,19 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
               <small className='text-red-600'>
                 {errors?.logo?.message?.toString()}
               </small>
-              {subscription?.status === null ? null : (
-                <small className='block py-4 text-muted-foreground'>
+              {subscription?.status !== 'active' && (
+                <small
+                  className='
+                  block
+                  text-muted-foreground
+              '
+                >
                   To customize your workspace, you need to be on a Pro Plan
                 </small>
               )}
             </div>
-            <div className='self-center md:self-end'>
-              <Button variant={'secondary'} disabled={isLoading} type='submit'>
+            <div className='self-end'>
+              <Button disabled={isLoading} type='submit'>
                 {!isLoading ? 'Create Workspace' : <Loader />}
               </Button>
             </div>

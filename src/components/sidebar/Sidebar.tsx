@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import React from 'react'
-
 import { cookies } from 'next/headers'
 import {
   getCollaboratoratingWorkspaces,
@@ -83,8 +82,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
         '
         >
           <div
-            className='pointer-events-none 
-          absolute 
+            className='pointer-events-none  
           bottom-0 
           z-40 
           h-20 

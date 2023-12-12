@@ -57,29 +57,21 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
   }, [state, defaultValue])
 
   return (
-    <div
-      className=' relative inline-block
-      text-left
-  '
-    >
+    <div className='text-center'>
       <div>
-        <span onClick={() => setIsOpen(!isOpen)}>
+        <div onClick={() => setIsOpen(!isOpen)}>
           {selectedOption ? (
             <SelectedWorkspace workspace={selectedOption} />
           ) : (
-            'Select a workspace'
+            <span>Select a workspaces</span>
           )}
-        </span>
+        </div>
       </div>
       {isOpen && (
         <div
           className='group
-          absolute
           z-50
-         
-          w-full
-          origin-top-right
-          overflow-hidden
+          mt-4
           rounded-md
           border-[1px]
           border-muted
@@ -88,8 +80,8 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
           backdrop-blur-lg
       '
         >
-          <div className='flex flex-col rounded-md w-full'>
-            <div className='!p-2'>
+          <div className='flex w-full flex-col rounded-md'>
+            <div className=''>
               {!!privateWorkspaces.length && (
                 <>
                   <p className='text-muted-foreground'>Private</p>
@@ -139,12 +131,10 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                 className='flex 
               w-full 
               items-center 
-              justify-center 
-              gap-2 
+              justify-center gap-2
               p-2 
               transition-all 
-              hover:bg-muted ' 
-              
+              hover:bg-muted '
               >
                 <article
                   className='flex 
@@ -154,7 +144,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                  justify-center 
                  rounded-full 
                  bg-slate-800 
-                 text-slate-500'
+                 '
                 >
                   +
                 </article>
