@@ -16,6 +16,7 @@ import { Input } from '../ui/input'
 import { ScrollArea } from '../ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
+import { getUsersFromSearch } from '@/lib/supabase/queries'
 
 interface CollaboratorSearchProps {
   existingCollaborators: User[] | []
@@ -43,11 +44,10 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
    */
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (timerRef) clearTimeout(timerRef.current)
-    console.log(e)
-    // timerRef.current = setTimeout(async () => {
-    //   const res = await getUsersFromSearch(e.target.value);
-    //   setSearchResults(res);
-    // }, 450);
+    timerRef.current = setTimeout(async () => {
+      const res = await getUsersFromSearch(e.target.value)
+      setSearchResults(res)
+    }, 250)
   }
 
   const addCollaborator = (user: User) => {
@@ -77,7 +77,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
           <Search />
           <Input
             name='name'
-            className='dark:bg-background'
+            className=''
             placeholder='Email'
             onChange={onChangeHandler}
           />
@@ -85,9 +85,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
         <ScrollArea
           className='mt-6
           w-full
-          overflow-y-scroll
-          rounded-md
-        '
+          overflow-auto rounded-md'
         >
           {searchResults
             .filter(
@@ -110,10 +108,8 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
                   <div
                     className='w-[180px] 
                   gap-2 
-                  overflow-hidden 
-                  overflow-ellipsis 
+                  
                   text-sm 
-                  text-muted-foreground
                   '
                   >
                     {user.email}

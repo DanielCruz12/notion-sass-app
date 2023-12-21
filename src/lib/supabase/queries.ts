@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, notExists } from "drizzle-orm";
+import { and, eq, ilike, notExists } from "drizzle-orm";
 import db from "./db"
 import { Folder, Subscription, User, workspace } from "./supabase.types"
 import { validate } from 'uuid'
@@ -140,3 +140,9 @@ export const addCollaborators = async (users: User[], workspaceId: string) => {
     });
     return response
 };
+
+export const getUsersFromSearch = async (email: string) => {
+    if (!email) return []
+    const accounts = db.select().from(users).where(ilike(users.email, `${email}%`))
+    return accounts
+} 
