@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Dialog,
   DialogContent,
@@ -6,15 +6,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import clsx from 'clsx';
+} from '@/components/ui/dialog'
+import clsx from 'clsx'
+import { ScrollArea } from '../ui/scroll-area'
 
 type CustomDialogTriggerProps = {
-  header?: string;
-  content?: React.ReactNode;
-  children: React.ReactNode;
-  description?: string;
-  className?: string;
+  header?: string
+  content?: React.ReactNode
+  children: React.ReactNode
+  description?: string
+  className?: string
 }
 
 const CustomDialogTrigger: React.FC<CustomDialogTriggerProps> = ({
@@ -27,22 +28,24 @@ const CustomDialogTrigger: React.FC<CustomDialogTriggerProps> = ({
   return (
     <Dialog>
       <DialogTrigger className={clsx('', className)}>{children}</DialogTrigger>
-      <DialogContent
-        className="h-screen
-        block
-        sm:h-[440px]
-        overflow-hidden
-        w-full
-      "
+      <ScrollArea
+        className='
+            w-full
+            overflow-y-scroll
+            rounded-md
+            border
+            border-muted-foreground/20'
       >
-        <DialogHeader>
-          <DialogTitle>{header}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        {content}
-      </DialogContent>
+        <DialogContent className='w-full'>
+          <DialogHeader>
+            <DialogTitle>{header}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+          {content}
+        </DialogContent>
+      </ScrollArea>
     </Dialog>
-  );
-};
+  )
+}
 
-export default CustomDialogTrigger;
+export default CustomDialogTrigger

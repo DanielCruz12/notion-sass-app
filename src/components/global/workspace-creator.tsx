@@ -12,16 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-/* import { SelectGroup } from '@radix-ui/react-select';
- */ import { Lock, Share } from 'lucide-react'
+import { SelectGroup } from '@radix-ui/react-select'
+import { Lock, Plus, Share } from 'lucide-react'
 import { Button } from '../ui/button'
 import { v4 } from 'uuid'
-/* import { addCollaborators, createWorkspace } from '@/lib/supabase/queries';
-import CollaboratorSearch from './collaborator-search';
-import { ScrollArea } from '../ui/scroll-area';
-import { useToast } from '../ui/use-toast'; */
+import { addCollaborators, createWorkspace } from '@/lib/supabase/queries'
+import { ScrollArea } from '../ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { createWorkspace } from '@/lib/supabase/queries'
+import CollaboratorsSearch from './collaborators-search'
 
 const WorkspaceCreator = () => {
   const { user } = useSupabaseUser()
@@ -33,9 +31,9 @@ const WorkspaceCreator = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   /*   const addCollaborator = (user: User) => {
-    setCollaborators([...collaborators, user])
-  } */
-
+    setCollaborators([...collaborators, user]);
+  };
+ */
   const removeCollaborator = (user: User) => {
     setCollaborators(collaborators.filter((c) => c.id !== user.id))
   }
@@ -57,15 +55,15 @@ const WorkspaceCreator = () => {
         bannerUrl: '',
       }
       if (permissions === 'private') {
-        /*         toast({ title: 'Success', description: 'Created the workspace' });
-         */ await createWorkspace(newWorkspace)
+        /*  toast({ title: 'Success', description: 'Created the workspace' }); */
+        await createWorkspace(newWorkspace)
         router.refresh()
       }
       if (permissions === 'shared') {
-        /*         toast({ title: 'Success', description: 'Created the workspace' })
-         */ await createWorkspace(newWorkspace)
-        /*         await addCollaborators(collaborators, uuid);
-         */ router.refresh()
+        /*  toast({ title: 'Success', description: 'Created the workspace' }); */
+        await createWorkspace(newWorkspace)
+        await addCollaborators(collaborators, uuid)
+        router.refresh()
       }
     }
     setIsLoading(false)
@@ -103,7 +101,7 @@ const WorkspaceCreator = () => {
           Permission
         </Label>
         <Select
-          onValueChange={(val: any) => {
+          onValueChange={(val) => {
             setPermissions(val)
           }}
           defaultValue={permissions}
@@ -112,7 +110,7 @@ const WorkspaceCreator = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <div>
+            <SelectGroup>
               <SelectItem value='private'>
                 <div
                   className='flex
@@ -141,33 +139,30 @@ const WorkspaceCreator = () => {
                   </article>
                 </div>
               </SelectItem>
-            </div>
+            </SelectGroup>
           </SelectContent>
         </Select>
       </>
       {permissions === 'shared' && (
         <div>
-          {/* <CollaboratorSearch
+          <CollaboratorsSearch
             existingCollaborators={collaborators}
-            getCollaborator={(user) => {
-              addCollaborator(user);
+            getCollaborator={() => {
+              /*               addCollaborator(user);
+               */
             }}
           >
-            <Button
-              type="button"
-              className="text-sm mt-4"
-            >
+            <Button type='button' className='mt-4 text-sm'>
               <Plus />
               Add Collaborators
             </Button>
-          </CollaboratorSearch> */}
+          </CollaboratorsSearch>
           <div className='mt-4'>
             <span className='text-sm text-muted-foreground'>
               Collaborators {collaborators.length || ''}
             </span>
-            <div
+            <ScrollArea
               className='
-            h-[120px]
             w-full
             overflow-y-scroll
             rounded-md
@@ -225,7 +220,7 @@ const WorkspaceCreator = () => {
                   </span>
                 </div>
               )}
-            </div>
+            </ScrollArea>
           </div>
         </div>
       )}
