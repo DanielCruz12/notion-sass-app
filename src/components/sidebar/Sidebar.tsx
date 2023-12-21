@@ -59,16 +59,16 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
       )}
     >
       <div>
-        <WorkspaceDropdown
-          privateWorkspaces={privateWorkspaces}
+        {/*    <WorkspaceDropdown
+            privateWorkspaces={privateWorkspaces}
           sharedWorkspaces={sharedWorkspaces}
-          collaboratingWorkspaces={collaboratingWorkspaces}
+          collaboratingWorkspaces={collaboratingWorkspaces} 
           defaultValue={[
-            ...privateWorkspaces,
+             ...privateWorkspaces,
             ...collaboratingWorkspaces,
-            ...sharedWorkspaces,
+            ...sharedWorkspaces, 
           ].find((workspace) => workspace.id === params.workspaceId)}
-        />
+        /> */}
         {/*   <PlanUsage
           foldersLength={workspaceFolderData?.length || 0}
           subscription={subscriptionData}
@@ -97,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
         </div>
       </div>
       {/*       <UserCard subscription={subscriptionData} />
-       */}{' '}
+       */}
     </aside>
   )
 }
