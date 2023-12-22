@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import React from 'react'
 import { cookies } from 'next/headers'
 import {
@@ -7,14 +6,15 @@ import {
   getFolders,
   getPrivateWorkspaces,
   getSharedWorkspaces,
-  getUserSuscriptionStatus,
+  getUserSubscriptionStatus,
 } from '@/lib/supabase/queries'
 import { redirect } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 import WorkspaceDropdown from './workspace-dropdown'
+import { ScrollArea } from '../ui/scroll-area'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 /* import PlanUsage from './plan-usage';
 import NativeNavigation from './native-navigation';
-import { ScrollArea } from '../ui/scroll-area';
 import FoldersDropdownList from './folders-dropdown-list';
 import UserCard from './user-card';
  */
@@ -34,15 +34,15 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
 
   //subscr
   const { data: subscriptionData, error: subscriptionError } =
-    await getUserSuscriptionStatus(user.id)
+    await getUserSubscriptionStatus(user.id)
 
   //folders
   const { data: workspaceFolderData, error: foldersError } = await getFolders(
     params.workspaceId
   )
   //error
-  /*    if (subscriptionError || foldersError) redirect('/dashboard')
-   */
+  if (subscriptionError || foldersError) redirect('/dashboard')
+
   const [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces] =
     await Promise.all([
       getPrivateWorkspaces(user.id),
@@ -59,29 +59,29 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
       )}
     >
       <div>
-        {/*    <WorkspaceDropdown
-            privateWorkspaces={privateWorkspaces}
+        <WorkspaceDropdown
+          privateWorkspaces={privateWorkspaces}
           sharedWorkspaces={sharedWorkspaces}
-          collaboratingWorkspaces={collaboratingWorkspaces} 
+          collaboratingWorkspaces={collaboratingWorkspaces}
           defaultValue={[
-             ...privateWorkspaces,
+            ...privateWorkspaces,
             ...collaboratingWorkspaces,
-            ...sharedWorkspaces, 
+            ...sharedWorkspaces,
           ].find((workspace) => workspace.id === params.workspaceId)}
-        /> */}
-        {/*   <PlanUsage
+        />
+        {/* <PlanUsage
           foldersLength={workspaceFolderData?.length || 0}
           subscription={subscriptionData}
-        /> */}
-        {/*         <NativeNavigation myWorkspaceId={params.workspaceId} />
-         */}{' '}
-        <div
-          className=' h-[450px]
-          overflow-hidden
+        />
+        <NativeNavigation myWorkspaceId={params.workspaceId} /> */}
+        <ScrollArea
+          className='relative h-[450px]
+          overflow-auto
         '
         >
           <div
-            className='pointer-events-none  
+            className='pointer-events-none 
+          absolute 
           bottom-0 
           z-40 
           h-20 
@@ -90,14 +90,14 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
           from-background 
           to-transparent'
           />
-          {/* <FoldersDropdownList
+          {/*  <FoldersDropdownList
             workspaceFolders={workspaceFolderData || []}
             workspaceId={params.workspaceId}
           /> */}
-        </div>
+        </ScrollArea>
       </div>
       {/*       <UserCard subscription={subscriptionData} />
-       */}
+       */}{' '}
     </aside>
   )
 }
