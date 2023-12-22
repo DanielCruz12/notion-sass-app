@@ -7,10 +7,10 @@ import CustomDialogTrigger from '../global/custom-dialog-trigger'
 import WorkspaceCreator from '../global/workspace-creator'
 
 interface WorkspaceDropdownProps {
-  privateWorkspaces: workspace[] | []
-  sharedWorkspaces: workspace[] | []
-  collaboratingWorkspaces: workspace[] | []
-  defaultValue: workspace | undefined
+  privateWorkspaces: any
+  sharedWorkspaces: any
+  collaboratingWorkspaces: any
+  defaultValue?: any
 }
 
 const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
@@ -86,7 +86,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                 <>
                   <p className='text-muted-foreground'>Private</p>
                   <hr></hr>
-                  {privateWorkspaces.map((option) => (
+                  {privateWorkspaces.map((option: workspace) => (
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
@@ -99,7 +99,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                 <>
                   <p className='text-muted-foreground'>Shared</p>
                   <hr />
-                  {sharedWorkspaces.map((option) => (
+                  {sharedWorkspaces.map((option: workspace) => (
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
@@ -112,7 +112,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                 <>
                   <p className='text-muted-foreground'>Collaborating</p>
                   <hr />
-                  {collaboratingWorkspaces.map((option) => (
+                  {collaboratingWorkspaces.map((option: workspace) => (
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
