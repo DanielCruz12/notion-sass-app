@@ -63,12 +63,15 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
           privateWorkspaces={privateWorkspaces}
           sharedWorkspaces={sharedWorkspaces}
           collaboratingWorkspaces={collaboratingWorkspaces}
-          defaultValue={[
-            ...privateWorkspaces,
-            ...collaboratingWorkspaces,
-            ...sharedWorkspaces,
-          ].find((workspace) => workspace.id === params.workspaceId)}
-
+          defaultValue={
+            privateWorkspaces && sharedWorkspaces && collaboratingWorkspaces
+              ? [
+                  ...privateWorkspaces,
+                  ...sharedWorkspaces,
+                  ...collaboratingWorkspaces,
+                ].find((workspace) => workspace.id === params.workspaceId) || []
+              : []
+          }
         />
         {/* <PlanUsage
           foldersLength={workspaceFolderData?.length || 0}
