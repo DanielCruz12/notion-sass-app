@@ -73,18 +73,16 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
           z-50
           mt-4
           rounded-md
-          border-[1px]
-          border-muted
+          border-[1px] border-muted
           bg-black/10
           shadow-md
-          backdrop-blur-lg
       '
         >
-          <div className='flex w-full flex-col rounded-md'>
-            <div className=''>
+          <div className=' flex h-[300px] w-full flex-col rounded-md '>
+            <div className='overflow-y-scroll'>
               {!!privateWorkspaces.length && (
-                <>
-                  <p className='text-muted-foreground'>Private</p>
+                <div className='px-3'>
+                  <p className='text-gray-300'>Private</p>
                   <hr></hr>
                   {privateWorkspaces.map((option: workspace) => (
                     <SelectedWorkspace
@@ -93,10 +91,10 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                       onClick={handleSelect}
                     />
                   ))}
-                </>
+                </div>
               )}
               {!!sharedWorkspaces.length && (
-                <>
+                <div className='px-3'>
                   <p className='text-muted-foreground'>Shared</p>
                   <hr />
                   {sharedWorkspaces.map((option: workspace) => (
@@ -106,10 +104,10 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                       onClick={handleSelect}
                     />
                   ))}
-                </>
+                </div>
               )}
               {!!collaboratingWorkspaces.length && (
-                <>
+                <div className='px-3'>
                   <p className='text-muted-foreground'>Collaborating</p>
                   <hr />
                   {collaboratingWorkspaces.map((option: workspace) => (
@@ -119,7 +117,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                       onClick={handleSelect}
                     />
                   ))}
-                </>
+                </div>
               )}
             </div>
             <CustomDialogTrigger
