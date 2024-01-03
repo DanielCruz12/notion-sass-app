@@ -30,10 +30,16 @@ const WorkspaceCreator = () => {
   const [collaborators, setCollaborators] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  /*   const addCollaborator = (user: User) => {
-    setCollaborators([...collaborators, user]);
-  };
- */
+  const addCollaborator = (user: any) => {
+    console.log(user.email)
+    const isUserAlreadyCollaborator = collaborators.some(
+      (collaborator) => collaborator.id === user.id
+    )
+    if (!isUserAlreadyCollaborator) {
+      setCollaborators([...collaborators, user])
+    }
+  }
+
   const removeCollaborator = (user: User) => {
     setCollaborators(collaborators.filter((c) => c.id !== user.id))
   }
@@ -62,7 +68,7 @@ const WorkspaceCreator = () => {
       if (permissions === 'shared') {
         /*  toast({ title: 'Success', description: 'Created the workspace' }); */
         await createWorkspace(newWorkspace)
-        await addCollaborators(collaborators, uuid)
+        addCollaborators(collaborators, uuid)
         router.refresh()
       }
     }
@@ -148,8 +154,7 @@ const WorkspaceCreator = () => {
           <CollaboratorsSearch
             existingCollaborators={collaborators}
             getCollaborator={() => {
-              /*               addCollaborator(user);
-               */
+              addCollaborator(user)
             }}
           >
             <Button type='button' className='mt-4 text-sm'>
@@ -158,23 +163,25 @@ const WorkspaceCreator = () => {
             </Button>
           </CollaboratorsSearch>
           <div className='mt-4'>
-            <span className='text-sm text-muted-foreground'>
+            <span className=' text-sm text-white'>
               Collaborators {collaborators.length || ''}
             </span>
             <ScrollArea
               className='
+            h-[10rem]
             w-full
-            overflow-y-scroll
+            overflow-auto
             rounded-md
             border
-            border-muted-foreground/20'
+            '
             >
-              {collaborators.length ? (
+              {collaborators.length > 0 ? (
                 collaborators.map((c) => (
                   <div
-                    className='flex items-center
+                    className=' flex
+                      items-center
                       justify-between
-                      p-4
+                       p-4
                 '
                     key={c.id}
                   >
@@ -186,8 +193,7 @@ const WorkspaceCreator = () => {
                       <div
                         className='w-[140px] 
                           gap-2
-                          overflow-hidden
-                          overflow-ellipsis
+                         
                           text-sm
                           text-muted-foreground
                           sm:w-[300px]

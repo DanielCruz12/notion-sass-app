@@ -79,9 +79,8 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
         />
         <NativeNavigation myWorkspaceId={params.workspaceId} /> */}
         <ScrollArea
-          className='relative h-[450px] overflow-auto
-          
-        '
+          className=' h-[470px] w-full overflow-auto
+          rounded-md'
         >
           <div
             className='pointer-events-none 

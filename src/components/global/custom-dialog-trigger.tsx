@@ -27,7 +27,7 @@ const CustomDialogTrigger: React.FC<CustomDialogTriggerProps> = ({
 }) => {
   return (
     <Dialog>
-      <DialogTrigger className={clsx('', className)}>{children}</DialogTrigger>
+      <DialogTrigger className={clsx(className)}>{children}</DialogTrigger>
       <ScrollArea
         className='
             w-full
@@ -36,7 +36,7 @@ const CustomDialogTrigger: React.FC<CustomDialogTriggerProps> = ({
             border
             border-muted-foreground/20'
       >
-        <DialogContent className='w-full'>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{header}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>

@@ -108,7 +108,7 @@ export const subscriptions = pgTable('subscriptions', {
   }).default(sql`now()`),
 })
 export const collaborators = pgTable('collaborators', {
-  id: uuid('id').defaultRandom().primaryKey().notNull(),
+  id: uuid('id').defaultRandom().notNull().primaryKey(),
   workspaceId: uuid('workspace_id')
     .notNull()
     .references(() => workspaces.id, { onDelete: 'cascade' }),

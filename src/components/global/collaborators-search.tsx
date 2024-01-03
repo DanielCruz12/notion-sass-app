@@ -61,10 +61,8 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
         <SheetHeader>
           <SheetTitle>Search Collaborator</SheetTitle>
           <SheetDescription>
-            <p className='text-sm text-gray-500'>
-              You can also remove collaborators after adding them from the
-              settings tab.
-            </p>
+            You can also remove collaborators after adding them from the
+            settings tab.
           </SheetDescription>
         </SheetHeader>
         <div

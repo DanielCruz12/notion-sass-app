@@ -58,14 +58,12 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
 
   return (
     <div className='text-center'>
-      <div>
-        <div onClick={() => setIsOpen(!isOpen)}>
-          {selectedOption ? (
-            <SelectedWorkspace workspace={selectedOption} />
-          ) : (
-            <span>Select a workspaces</span>
-          )}
-        </div>
+      <div onClick={() => setIsOpen(!isOpen)}>
+        {selectedOption ? (
+          <SelectedWorkspace workspace={selectedOption} />
+        ) : (
+          <span>Select a workspaces</span>
+        )}
       </div>
       {isOpen && (
         <div
@@ -134,7 +132,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
               transition-all 
               hover:bg-muted '
               >
-                <article
+                <div
                   className='flex 
                 h-4
                  w-4 
@@ -145,7 +143,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                  '
                 >
                   +
-                </article>
+                </div>
                 Create workspace
               </div>
             </CustomDialogTrigger>

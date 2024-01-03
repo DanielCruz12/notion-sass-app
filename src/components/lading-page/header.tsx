@@ -33,9 +33,9 @@ const Header = () => {
    */
   return (
     <header className='flex items-center justify-between p-4 '>
-      <aside>
+      <div>
         <Link href={'/'}>Daniel{'´'}s app</Link>
-      </aside>
+      </div>
       <NavigationMenu className='flex items-center justify-center'>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -97,9 +97,9 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div className='text-sm font-medium leading-none '>{title}</div>
-          <p className='line-clamp-2 text-sm leading-snug text-gray-400'>
+          <div className='line-clamp-2 text-sm leading-snug text-gray-400'>
             {children}
-          </p>
+          </div>
         </a>
       </NavigationMenuLink>
     </li>
