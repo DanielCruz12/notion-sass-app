@@ -100,7 +100,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
               >
                 <div className='flex items-center gap-4'>
                   <Avatar className='h-8 w-8'>
-                    <AvatarImage src='/avatars/7.png' />
+                    <AvatarImage src='' />
                     <AvatarFallback>CP</AvatarFallback>
                   </Avatar>
                   <div
@@ -117,7 +117,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
                   variant='secondary'
                   onClick={() => addCollaborator(user)}
                 >
-                  Add
+                  Add user
                 </Button>
               </div>
             ))}

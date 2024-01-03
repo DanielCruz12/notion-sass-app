@@ -30,8 +30,7 @@ const WorkspaceCreator = () => {
   const [collaborators, setCollaborators] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const addCollaborator = (user: any) => {
-    console.log(user.email)
+  const addCollaborator = (user: User) => {
     const isUserAlreadyCollaborator = collaborators.some(
       (collaborator) => collaborator.id === user.id
     )
@@ -153,7 +152,7 @@ const WorkspaceCreator = () => {
         <div>
           <CollaboratorsSearch
             existingCollaborators={collaborators}
-            getCollaborator={() => {
+            getCollaborator={(user) => {
               addCollaborator(user)
             }}
           >
@@ -187,7 +186,7 @@ const WorkspaceCreator = () => {
                   >
                     <div className='flex items-center gap-4'>
                       <Avatar>
-                        <AvatarImage src='/avatars/7.png' />
+                        <AvatarImage src='' />
                         <AvatarFallback>PJ</AvatarFallback>
                       </Avatar>
                       <div

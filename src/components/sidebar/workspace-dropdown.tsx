@@ -93,7 +93,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
               )}
               {!!sharedWorkspaces.length && (
                 <div className='px-3'>
-                  <p className='text-muted-foreground'>Shared</p>
+                  <p className='text-gray-300'>Shared</p>
                   <hr />
                   {sharedWorkspaces.map((option: workspace) => (
                     <SelectedWorkspace
@@ -106,7 +106,7 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
               )}
               {!!collaboratingWorkspaces.length && (
                 <div className='px-3'>
-                  <p className='text-muted-foreground'>Collaborating</p>
+                  <p className='text-gray-300'>Collaborating</p>
                   <hr />
                   {collaboratingWorkspaces.map((option: workspace) => (
                     <SelectedWorkspace

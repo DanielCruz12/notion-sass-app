@@ -44,21 +44,16 @@ const SelectedWorkspace: React.FC<SelectedWorkspaceProps> = ({
       p-2 
       transition-all hover:bg-muted'
     >
-      <Image
-        src={workspaceLogo}
-        alt='workspace logo'
-        width={26}
-        height={26}
-      />
+      <Image src={workspaceLogo} alt='workspace logo' width={24} height={24} />
       <div className='flex flex-col'>
-        <p
+        <small
           className='
           w-full
         whitespace-nowrap 
-        text-lg'
+        text-sm'
         >
           {workspace.title}
-        </p>
+        </small>
       </div>
     </Link>
   )
