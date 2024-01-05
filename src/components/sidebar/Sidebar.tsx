@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 import React from 'react'
 import { cookies } from 'next/headers'
 import {
@@ -13,6 +14,7 @@ import { twMerge } from 'tailwind-merge'
 import WorkspaceDropdown from './workspace-dropdown'
 import { ScrollArea } from '../ui/scroll-area'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import PlanUsage from './plan-usage'
 /* import PlanUsage from './plan-usage';
 import NativeNavigation from './native-navigation';
 import FoldersDropdownList from './folders-dropdown-list';
@@ -59,6 +61,10 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
       )}
     >
       <div>
+        <PlanUsage
+          foldersLength={workspaceFolderData?.length || 0}
+          subscription={subscriptionData}
+        />
         <WorkspaceDropdown
           privateWorkspaces={privateWorkspaces}
           sharedWorkspaces={sharedWorkspaces}
@@ -73,10 +79,8 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
               : []
           }
         />
-        {/* <PlanUsage
-          foldersLength={workspaceFolderData?.length || 0}
-          subscription={subscriptionData}
-        />
+
+        {/* 
         <NativeNavigation myWorkspaceId={params.workspaceId} /> */}
         <ScrollArea
           className=' h-[470px] w-full overflow-auto

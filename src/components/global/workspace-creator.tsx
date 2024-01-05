@@ -20,11 +20,12 @@ import { addCollaborators, createWorkspace } from '@/lib/supabase/queries'
 import { ScrollArea } from '../ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import CollaboratorsSearch from './collaborators-search'
+import { useToast } from '../ui/use-toast'
 
 const WorkspaceCreator = () => {
   const { user } = useSupabaseUser()
-  /*   const { toast } = useToast();
-   */ const router = useRouter()
+  const { toast } = useToast()
+  const router = useRouter()
   const [permissions, setPermissions] = useState('private')
   const [title, setTitle] = useState('')
   const [collaborators, setCollaborators] = useState<User[]>([])
@@ -60,12 +61,12 @@ const WorkspaceCreator = () => {
         bannerUrl: '',
       }
       if (permissions === 'private') {
-        /*  toast({ title: 'Success', description: 'Created the workspace' }); */
+        toast({ title: 'Success', description: 'Created the workspace' })
         await createWorkspace(newWorkspace)
         router.refresh()
       }
       if (permissions === 'shared') {
-        /*  toast({ title: 'Success', description: 'Created the workspace' }); */
+        toast({ title: 'Success', description: 'Created the workspace' })
         await createWorkspace(newWorkspace)
         addCollaborators(collaborators, uuid)
         router.refresh()
