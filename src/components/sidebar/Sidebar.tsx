@@ -15,6 +15,7 @@ import WorkspaceDropdown from './workspace-dropdown'
 import { ScrollArea } from '../ui/scroll-area'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import PlanUsage from './plan-usage'
+import NativeNavigation from './native-navigation'
 /* import PlanUsage from './plan-usage';
 import NativeNavigation from './native-navigation';
 import FoldersDropdownList from './folders-dropdown-list';
@@ -80,8 +81,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
           }
         />
 
-        {/* 
-        <NativeNavigation myWorkspaceId={params.workspaceId} /> */}
+        <NativeNavigation myWorkspaceId={params.workspaceId} className="" />
         <ScrollArea
           className=' h-[470px] w-full overflow-auto
           rounded-md'
