@@ -1,7 +1,7 @@
 'use client'
+import React, { useEffect, useState } from 'react'
 import { useAppState } from '@/lib/providers/state-provider'
 import { Subscription } from '@/lib/supabase/supabase.types'
-import React, { useEffect, useState } from 'react'
 import { Progress } from '../ui/progress'
 import { MAX_FOLDERS_FREE_PLAN } from '@/lib/constants/constants'
 
