@@ -90,14 +90,14 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
           from-background 
           to-transparent'
           />
-         <FoldersDropdownList
+          <FoldersDropdownList
             workspaceFolders={workspaceFolderData || []}
             workspaceId={params.workspaceId}
           />
         </ScrollArea>
       </div>
       {/*       <UserCard subscription={subscriptionData} />
-       */}{' '}
+       */}
     </aside>
   )
 }

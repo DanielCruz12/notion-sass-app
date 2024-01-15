@@ -2,11 +2,14 @@
 
 import { useAppState } from '@/lib/providers/state-provider'
 import { useEffect, useState } from 'react'
+import TooltipComponent from '../global/tooltip-component'
+import { PlusIcon } from 'lucide-react'
 
 type FoldersDropdownListProps = {
   workspaceFolders: any
   workspaceId: any
 }
+
 const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
   workspaceFolders,
   workspaceId,
@@ -31,6 +34,7 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
       })
     }
   }, [dispatch, state.workspaces, workspaceFolders, workspaceId])
+
   useEffect(() => {
     setFolders(
       state.workspaces.find((workspace) => workspace.id === workspaceId)
@@ -39,22 +43,29 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
   }, [state.workspaces, workspaceId])
   console.log(folders)
 
+  const addFolderHandler = () => {
+    alert('s')
+  }
+
   return (
     <div
-      className='group/title
-  text-Neutrals/neutrals-8 
-  sticky 
-  top-0 
-  z-20 
-  flex  
-  h-10 
-  w-full 
+      className='group/title text-Neutrals/neutrals-8 sticky top-0 z-20 flex h-10 w-full 
   items-center 
   justify-between 
   bg-background 
   pr-4'
     >
-      folder-FropdownDistL
+      <span className='text-xs font-bold'>Folders</span>
+      <TooltipComponent message='Create folder'>
+        <PlusIcon
+          onClick={addFolderHandler}
+          size={16}
+          className='hidden
+            cursor-pointer 
+            group-hover/title:inline-block
+          '
+        />
+      </TooltipComponent>
     </div>
   )
 }
