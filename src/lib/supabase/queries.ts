@@ -141,8 +141,19 @@ export const addCollaborators = async (users: User[], workspaceId: any) => {
     return response
 };
 
+export const createFolder = async (folder: Folder) => {
+    try {
+        const res = await db.insert(folders).values(folder)
+        console.log(res)
+        return { data: null, error: null }
+    } catch (error) {
+        return { data: null, error: "No saved folder" }
+    }
+}
+
 export const getUsersFromSearch = async (email: string) => {
     if (!email) return []
     const accounts = db.select().from(users).where(ilike(users.email, `${email}%`))
     return accounts
-} 
+}
+

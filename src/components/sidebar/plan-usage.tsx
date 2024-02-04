@@ -52,9 +52,8 @@ const PlanUsage: React.FC<PlanUsageProps> = ({
         </div>
       )}
       {subscription?.status !== 'active' && (
-        <Progress value={40} className='h-1' />
-        /*         <Progress value={usagePercentage} className='h-1' />
-         */
+        <Progress value={usagePercentage} className='h-1' />
+        
       )}
     </article>
   )
