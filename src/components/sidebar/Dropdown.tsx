@@ -12,6 +12,7 @@ import TooltipComponent from '../global/tooltip-component'
 import { PlusIcon, Trash } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
+import { v4 } from 'uuid'
 
 type DropDownProps = {
   title: string
@@ -40,6 +41,7 @@ const Dropdown: React.FC<DropDownProps> = ({
   const router = useRouter()
 
   const isFolder = listType === 'folder'
+
   const groupIdentifies = useMemo(() => {
     return clsx(
       'dark:text-white whitespace-nowrap flex justify-between items-center w-full relative',
@@ -49,12 +51,25 @@ const Dropdown: React.FC<DropDownProps> = ({
       }
     )
   }, [isFolder])
+
   const listStyles = useMemo(() => {
     return clsx('relative', {
       'border-none': isFolder,
       'border-none m-6 text-[16px] py-1': !isFolder,
     })
   }, [isFolder])
+
+  const hoverStyles = useMemo(
+    () =>
+      clsx(
+        'h-full hidden rounded-sm absolute right-0 items-center justify-center',
+        {
+          'group-hover/file:block': listType === 'file',
+          'group-hover/folder:block': listType === 'folder',
+        }
+      ),
+    [listType]
+  )
 
   //folder title synced with server data and local
   const folderTitle: string | undefined = useMemo(() => {
@@ -137,6 +152,41 @@ const Dropdown: React.FC<DropDownProps> = ({
     }
   }
 
+  /* 
+  const addNewFile = async () => {
+    if (!workspaceId) return;
+    const newFile: File = {
+      folderId: id,
+      data: null,
+      createdAt: new Date().toISOString(),
+      inTrash: null,
+      title: 'Untitled',
+      iconId: '📄',
+      id: v4(),
+      workspaceId,
+      bannerUrl: '',
+    };
+    dispatch({
+      type: 'ADD_FILE',
+      payload: { file: newFile, folderId: id, workspaceId },
+    });
+    const { error } = await createFile(newFile);
+    const error=""
+    if (error) {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Could not create a file',
+      });
+    } else {
+      toast({
+        title: 'Success',
+        description: 'File created.',
+      });
+    }
+  };
+   */
+
   //* move to trash
   const handleMoveToTrash = () => {}
 
@@ -218,7 +268,7 @@ const Dropdown: React.FC<DropDownProps> = ({
               readOnly={!isEditing}
             />
           </div>
-          <div className='group-hover:/file:block absolute right-0 hidden h-full items-center justify-center gap-2 rounded-sm'>
+          <div className={hoverStyles}>
             <TooltipComponent message='Delete folder'>
               <Trash
                 size={15}

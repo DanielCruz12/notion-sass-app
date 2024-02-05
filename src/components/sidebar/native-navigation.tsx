@@ -13,7 +13,6 @@ const NativeNavigation: React.FC<NativeNavigationProps> = ({
   myWorkspaceId,
   className,
 }) => {
-  console.log(myWorkspaceId)
   return (
     <nav className={twMerge('my-2', className)}>
       <ul>
