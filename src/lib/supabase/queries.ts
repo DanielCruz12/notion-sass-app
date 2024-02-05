@@ -33,6 +33,19 @@ export const getFolders = async (workspaceId: string) => {
     }
 }
 
+export const updateFolder = async (
+    folder: Partial<Folder>,
+    folderId: string
+) => {
+    try {
+        await db.update(folders).set(folder).where(eq(folders.id, folderId));
+        return { data: null, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: null, error: 'Error' };
+    }
+};
+
 export const getPrivateWorkspaces = async (userId: string) => {
     if (!userId) return null
     const privateWorkspaces = await db.select({
@@ -100,7 +113,6 @@ export const getFiles = async (folderId: any) => {
             .where(eq(files.folderId, folderId)))
         return { data: results, error: null };
     } catch (error) {
-        console.log(error);
         return { data: null, error: 'Error' };
     }
 
@@ -111,7 +123,6 @@ export const createWorkspace = async (workspace: workspace) => {
         const response = await db.insert(workspaces).values(workspace);
         return { data: response, error: null };
     } catch (error) {
-        console.log(error);
         return { data: null, error: 'Error' };
     }
 };
@@ -143,8 +154,8 @@ export const addCollaborators = async (users: User[], workspaceId: any) => {
 
 export const createFolder = async (folder: Folder) => {
     try {
+        // eslint-disable-next-line no-unused-vars
         const res = await db.insert(folders).values(folder)
-        console.log(res)
         return { data: null, error: null }
     } catch (error) {
         return { data: null, error: "No saved folder" }
