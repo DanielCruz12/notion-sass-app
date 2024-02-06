@@ -41,10 +41,19 @@ export const updateFolder = async (
         await db.update(folders).set(folder).where(eq(folders.id, folderId));
         return { data: null, error: null };
     } catch (error) {
-        console.log(error);
         return { data: null, error: 'Error' };
     }
 };
+
+export const updateFile = async (file: any, fileId: string) => {
+    try {
+        // eslint-disable-next-line no-unused-vars
+        const res = await db.update(files).set(file).where(eq(files.id, fileId))
+        return { data: null, error: null }
+    } catch (error) {
+        return { data: null, error: 'Error' }
+    }
+}
 
 export const getPrivateWorkspaces = async (userId: string) => {
     if (!userId) return null
@@ -102,6 +111,15 @@ export const getSharedWorkspaces = async (userId: string) => {
     return sharedWorkspaces
 }
 
+export const createFile = async (file: any) => {
+    try {
+        await db.insert(files).values(file);
+        return { data: null, error: null };
+    } catch (error) {
+        return { data: null, error: 'Error' };
+    }
+};
+
 export const getFiles = async (folderId: any) => {
     const isValid = validate(folderId);
     if (!isValid) return { data: null, error: 'Error' };
@@ -115,7 +133,6 @@ export const getFiles = async (folderId: any) => {
     } catch (error) {
         return { data: null, error: 'Error' };
     }
-
 }
 
 export const createWorkspace = async (workspace: workspace) => {
@@ -135,7 +152,6 @@ export const getUserSubscriptionStatus = async (userId: string) => {
         if (data) return { data: data as Subscription, error: null };
         else return { data: null, error: null };
     } catch (error) {
-        console.log(error);
         return { data: null, error: `Error` };
     }
 };
