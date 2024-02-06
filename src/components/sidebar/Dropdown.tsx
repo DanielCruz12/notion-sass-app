@@ -123,11 +123,27 @@ const Dropdown: React.FC<DropDownProps> = ({
     const fId = id.split('folder')
     if (fId?.length === 1) {
       if (!folderTitle) return
+      toast({
+        title: 'Success',
+        description: 'Folder title changed.',
+      })
       await updateFolder({ title }, fId[0])
     }
 
     if (fId.length === 2 && fId[1]) {
       if (!fileTitle) return
+      const { data, error } = await updateFile({ title: fileTitle }, fId[1])
+      if (error) {
+        toast({
+          title: 'Error',
+          variant: 'destructive',
+          description: 'Could not update the title for this file',
+        })
+      } else
+        toast({
+          title: 'Success',
+          description: 'File title changed.',
+        })
     }
   }
 

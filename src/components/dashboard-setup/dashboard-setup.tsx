@@ -24,6 +24,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { z } from 'zod'
 import { CreateWorkspaceFormSchema } from '@/lib/types/types'
 import Loader from '../Loader'
+import { useToast } from '../ui/use-toast'
 
 interface DashboardSetupProps {
   user: AuthUser
@@ -34,8 +35,8 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
   subscription,
   user,
 }) => {
-  /*   const { toast } = useToast();
-   */ const router = useRouter()
+  const { toast } = useToast()
+  const router = useRouter()
   const { dispatch } = useAppState()
   const [selectedEmoji, setSelectedEmoji] = useState('💼')
   const supabase = createClientComponentClient()
@@ -70,11 +71,10 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         if (error) throw new Error('')
         filePath = data.path
       } catch (error) {
-        console.log('Error', error)
-        /*  toast({
+        toast({
           variant: 'destructive',
           title: 'Error! Could not upload your workspace logo',
-        }); */
+        })
       }
     }
     try {
@@ -90,7 +90,7 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         logo: filePath,
         bannerUrl: filePath,
       }
-      const { data, error: createError } = await createWorkspace(newWorkspace)
+      const { error: createError } = await createWorkspace(newWorkspace)
       if (createError) {
         throw new Error()
       }
@@ -99,20 +99,20 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         payload: { ...newWorkspace, folders: [] },
       })
 
-      /*  toast({
+      toast({
         title: 'Workspace Created',
         description: `${newWorkspace.title} has been created successfully.`,
-      }); */
+      })
 
       router.replace(`/dashboard/${newWorkspace.id}`)
     } catch (error) {
       console.log(error, 'Error')
-      /*  toast({
+      toast({
         variant: 'destructive',
         title: 'Could not create your workspace',
         description:
           "Oops! Something went wrong, and we couldn't create your workspace. Try again or come back later.",
-      }); */
+      })
     } finally {
       reset()
     }
