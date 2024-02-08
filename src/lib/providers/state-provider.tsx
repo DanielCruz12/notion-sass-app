@@ -26,7 +26,7 @@ type Action =
   | { type: 'DELETE_WORKSPACE'; payload: string }
   | {
       type: 'UPDATE_WORKSPACE'
-      payload: { workspace: Partial<appWorkspacesType>; workspaceId: string }
+      payload: { workspace: Partial<appWorkspacesType>, workspaceId: string }
     }
   | {
       type: 'SET_WORKSPACES'

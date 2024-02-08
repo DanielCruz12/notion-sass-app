@@ -256,12 +256,12 @@ const Dropdown: React.FC<DropDownProps> = ({
         toast({
           title: 'Error',
           variant: 'destructive',
-          description: 'Could not move the folder to trash',
+          description: 'Could not move the file to trash',
         })
       } else {
         toast({
           title: 'Success',
-          description: 'Moved folder to trash',
+          description: 'Moved file to trash',
         })
       }
     }

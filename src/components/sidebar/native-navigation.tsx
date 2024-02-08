@@ -1,51 +1,69 @@
-import Link from 'next/link'
-import React from 'react'
-import { twMerge } from 'tailwind-merge'
-import CypressSettingsIcon from '../icons/cypressSettingsIcon'
+import Link from 'next/link';
+import React from 'react';
+import { twMerge } from 'tailwind-merge';
+import CypressPageIcon from '../icons/cypressWorkSpaceIcon';
+import CypressSettingsIcon from '../icons/cypressSettignsIcon';
+import Settings from '../settings/Settings';
 
-type NativeNavigationProps = {
-  myWorkspaceId: string
-  className: string
-  // eslint-disable-next-line no-unused-vars
-  getSelectedItem?: (selection: string) => void
+
+interface NativeNavigationProps {
+  myWorkspaceId: string;
+  className?: string;
 }
+
 const NativeNavigation: React.FC<NativeNavigationProps> = ({
   myWorkspaceId,
   className,
 }) => {
   return (
     <nav className={twMerge('my-2', className)}>
-      <ul>
+      <ul className="flex flex-col gap-2">
         <li>
           <Link
-            className='group/native flex text-neutral-500 transition-all'
+            className="group/native
+            flex
+            text-Neutrals/neutrals-7
+            transition-all
+            gap-2
+          "
             href={`/dashboard/${myWorkspaceId}`}
           >
-            <span>My workspace</span>
-            <CypressSettingsIcon />
+            <CypressPageIcon />
+            <span>My Workspace</span>
           </Link>
         </li>
-        <li>
-          <Link
-            className='group/native flex text-neutral-500 transition-all'
-            href={`/dashboard/${myWorkspaceId}`}
+
+        <Settings>
+          <li
+            className="group/native
+            flex
+            text-Neutrals/neutrals-7
+            transition-all
+            gap-2
+            cursor-pointer
+          "
           >
+            <CypressSettingsIcon />
             <span>Settings</span>
-            <CypressSettingsIcon />
-          </Link>
-        </li>
-        <li>
-          <Link
-            className='group/native flex text-neutral-500 transition-all'
-            href={`/dashboard/${myWorkspaceId}`}
+          </li>
+        </Settings>
+
+       {/*  <Trash>
+          <li
+            className="group/native
+            flex
+            text-Neutrals/neutrals-7
+            transition-all
+            gap-2
+          "
           >
+            <CypressTrashIcon />
             <span>Trash</span>
-            <CypressSettingsIcon />
-          </Link>
-        </li>
+          </li>
+        </Trash> */}
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default NativeNavigation
+export default NativeNavigation;
