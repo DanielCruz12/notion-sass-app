@@ -6,6 +6,7 @@ import { Folder, Subscription, User, workspace } from "./supabase.types"
 import { validate } from 'uuid'
 import { folders, users, workspaces, files } from "../../../migrations/schema";
 import { collaborators } from './schema'
+import { revalidatePath } from "next/cache";
 
 export const getUserSuscriptionStatus = async (userId: string) => {
     try {
@@ -49,6 +50,17 @@ export const updateFile = async (file: any, fileId: string) => {
     try {
         // eslint-disable-next-line no-unused-vars
         const res = await db.update(files).set(file).where(eq(files.id, fileId))
+        return { data: null, error: null }
+    } catch (error) {
+        return { data: null, error: 'Error' }
+    }
+}
+
+export const updateWorkspace = async (workspace: Partial<workspace>, workspaceId: string) => {
+    if (!workspaceId) return
+    try {
+        await db.update(workspaces).set(workspace).where(eq(workspaces.id, workspaceId))
+        revalidatePath(`/dashboard/${workspaceId}`)
         return { data: null, error: null }
     } catch (error) {
         return { data: null, error: 'Error' }
@@ -111,6 +123,8 @@ export const getSharedWorkspaces = async (userId: string) => {
     return sharedWorkspaces
 }
 
+
+
 export const createFile = async (file: any) => {
     try {
         await db.insert(files).values(file);
@@ -154,7 +168,25 @@ export const getUserSubscriptionStatus = async (userId: string) => {
     } catch (error) {
         return { data: null, error: `Error` };
     }
-};
+}
+
+export const getCollaborators = async (workspaceId: string) => {
+    const response = await db
+        .select()
+        .from(collaborators)
+        .where(eq(collaborators.workspaceId, workspaceId));
+    if (!response.length) return [];
+    const userInformation: Promise<User | undefined>[] = response.map(
+        async (user) => {
+            const exists = await db.query.users.findFirst({
+                where: (u, { eq }) => eq(u.id, user.userId),
+            });
+            return exists;
+        }
+    );
+    const resolvedUsers = await Promise.all(userInformation);
+    return resolvedUsers.filter(Boolean) as User[];
+}
 
 export const addCollaborators = async (users: User[], workspaceId: any) => {
     const response = users.forEach(async (user: User) => {
@@ -167,6 +199,26 @@ export const addCollaborators = async (users: User[], workspaceId: any) => {
     });
     return response
 };
+
+export const removeCollaborators = async (users: User[], workspaceId: any) => {
+    // eslint-disable-next-line no-unused-vars
+    const response = users.forEach(async (user: User) => {
+        const userExists = await db.query.workspaces.findFirst({
+            where: (u: any, { eq }) =>
+                and(eq(u.userId, user.id), eq(u.workspaceId, workspaceId)),
+        });
+        if (userExists)
+            await db.delete(collaborators)
+                .where(and(
+                    eq(collaborators.workspaceId, workspaceId),
+                    eq(collaborators.userId, user.id)))
+    });
+};
+
+export const deleteWorkspace = async (workspaceId: string) => {
+    if (!workspaceId) return
+    await db.delete(workspaces).where(eq(workspaces.id, workspaceId))
+}
 
 export const createFolder = async (folder: Folder) => {
     try {
