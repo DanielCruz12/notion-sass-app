@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Briefcase } from 'lucide-react'
 import { Separator } from '@radix-ui/react-select'
+import { Input } from '../ui/input'
 
 const SettingsForm = () => {
   const { toast } = useToast()
@@ -45,7 +46,7 @@ const SettingsForm = () => {
         <label className='text-sm' htmlFor='workspaceName'>
           Name
         </label>
-        <input
+        <Input
           type='text'
           className='rounded-md py-2'
           value={workspaceDetails ? workspaceDetails.title : ''}
