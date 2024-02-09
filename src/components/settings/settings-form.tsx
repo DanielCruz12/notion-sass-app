@@ -9,7 +9,15 @@ import { useEffect, useRef, useState } from 'react'
 import { User, workspace } from '@/lib/supabase/supabase.types'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Briefcase, Lock, Plus, Share } from 'lucide-react'
+import {
+  Briefcase,
+  CreditCard,
+  ExternalLink,
+  Lock,
+  Plus,
+  Share,
+  UserIcon,
+} from 'lucide-react'
 import { Separator } from '@radix-ui/react-select'
 import { Input } from '../ui/input'
 import { v4 } from 'uuid'
@@ -22,6 +30,18 @@ import {
   removeCollaborators,
   updateWorkspace,
 } from '@/lib/supabase/queries'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 import CollaboratorSearch from '../global/collaborators-search'
 import {
   Select,
@@ -34,6 +54,8 @@ import {
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 import { Alert, AlertDescription } from '../ui/alert'
+import CypressPageIcon from '../icons/cypressWorkSpaceIcon'
+import Link from 'next/link'
 
 const SettingsForm = () => {
   const { toast } = useToast()
@@ -50,14 +72,8 @@ const SettingsForm = () => {
   const [workspaceDetails, setWorkspaceDetails] = useState<workspace | null>(
     null
   )
-
-  const handleWorkspace = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!workspaceId || !e.target.value) return
-    dispatch({
-      type: 'UPDATE_WORKSPACE',
-      payload: { workspace: { title: e.target.value }, workspaceId },
-    })
-  }
+  /*   const { open, setOpen } = useSubscriptionModal();
+   */
 
   const redirectCustomPortals = async () => {
     setLoadingPortal(true)
@@ -122,23 +138,15 @@ const SettingsForm = () => {
     }, 500)
   }
 
-  const handleDeleteWorkspace = async () => {
-    if (!workspaceId) return
-    await deleteWorkspace(workspaceId)
-    toast({ title: 'Successfully deleted your workspace' })
-    dispatch({ type: 'DELETE_WORKSPACE', payload: workspaceId })
-    router.replace('/dashboard')
-  }
-
   useEffect(() => {
     const showingWorkspace = state.workspaces.find(
       (workspace) => workspace.id === workspaceId
     )
     if (showingWorkspace) setWorkspaceDetails(showingWorkspace)
-   /*  if (!user?.id) return
+    /*  if (!user?.id) return
     getPrivateWorkspaces(user.id)
     getSharedWorkspaces(user.id) */
-  }, [workspaceId, state, user?.id])
+  }, [workspaceId, state])
 
   useEffect(() => {
     if (!workspaceId) return
@@ -150,7 +158,7 @@ const SettingsForm = () => {
       }
     }
     fetchCollaborators()
-   /*  if (!user?.id) return
+    /*  if (!user?.id) return
     getPrivateWorkspaces(user.id)
     getSharedWorkspaces(user.id) */
   }, [workspaceId, user])
@@ -196,7 +204,7 @@ const SettingsForm = () => {
           value={workspaceDetails ? workspaceDetails.title : ''}
           name='workspaceName'
           placeholder='Workspace name'
-          onChange={handleWorkspace}
+          onChange={workspaceNameChange}
         />
 
         <label className='pt-3 text-sm text-white' htmlFor='workspaceLogo'>
@@ -350,20 +358,126 @@ const SettingsForm = () => {
       {/* alert */}
       <Alert variant={'destructive'}>
         <AlertDescription>
-          <Button
-            type='submit'
-            size={'sm'}
-            variant={'destructive'}
-            className='mt-4  border-2
+          Warning! deleting you workspace will permanantly delete all data
+          related to this workspace.
+        </AlertDescription>
+        <Button
+          type='submit'
+          size={'sm'}
+          variant={'destructive'}
+          className='mt-4  border-2
             border-destructive 
             bg-destructive/40 
             text-sm'
-            onClick={handleDeleteWorkspace}
-          >
-            Delete workspace
-          </Button>
-        </AlertDescription>
+          onClick={async () => {
+            if (!workspaceId) return
+            await deleteWorkspace(workspaceId)
+            toast({ title: 'Successfully deleted your workspace' })
+            dispatch({ type: 'DELETE_WORKSPACE', payload: workspaceId })
+            router.replace('/dashboard')
+          }}
+        >
+          Delete workspace
+        </Button>
       </Alert>
+
+      <p className='mt-6 flex items-center gap-2'>
+        <UserIcon size={20} /> Profile
+      </p>
+      <Separator />
+      <div className='flex items-center'>
+        <Avatar>
+          <AvatarImage src={''} />
+          <AvatarFallback>
+            <CypressPageIcon />
+          </AvatarFallback>
+        </Avatar>
+        <div className='ml-6 flex flex-col'>
+          <small className='cursor-not-allowed text-muted-foreground'>
+            {user ? user.email : ''}
+          </small>
+          <Label
+            htmlFor='profilePicture'
+            className='text-sm text-muted-foreground'
+          >
+            Profile Picture
+          </Label>
+          <Input
+            name='profilePicture'
+            type='file'
+            accept='image/*'
+            placeholder='Profile Picture'
+            // onChange={onChangeProfilePicture}
+            disabled={uploadingPictureProfile}
+          />
+        </div>
+      </div>
+      {/* <LogoutButton>
+          <div className="flex items-center">
+            <LogOut />
+          </div>
+        </LogoutButton> */}
+      <p className='mt-6 flex items-center gap-2'>
+        <CreditCard size={20} /> Billing & Plan
+      </p>
+      <Separator />
+      <p className='text-muted-foreground'>
+        You are currently on a{' '}
+        {subscription?.status === 'active' ? 'Pro' : 'Free'} Plan
+      </p>
+      <Link
+        href='/'
+        target='_blank'
+        className='flex flex-row items-center gap-2 text-muted-foreground'
+      >
+        View Plans <ExternalLink size={16} />
+      </Link>
+      {subscription?.status === 'active' ? (
+        <div>
+          <Button
+            type='button'
+            size='sm'
+            variant={'secondary'}
+            disabled={loadingPortal}
+            className='text-sm'
+            onClick={redirectCustomPortals}
+          >
+            Manage Subscription
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <Button
+            type='button'
+            size='sm'
+            variant={'secondary'}
+            className='text-sm'
+            /*   onClick={() => setOpen(true)} */
+          >
+            Start Plan
+          </Button>
+        </div>
+      )}
+
+      <AlertDialog open={openAlertMessage}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDescription>
+              Changing a Shared workspace to a Private workspace will remove all
+              collaborators permanantly.
+            </AlertDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setOpenAlertMessage(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={onClickAlertConfirm}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
