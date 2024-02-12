@@ -84,7 +84,6 @@ const SettingsForm = () => {
       window.location.assign('url') /* pass correct url */
     } catch (error) {
       setLoadingPortal(false)
-      console.log(error)
     }
     setLoadingPortal(false)
   }
