@@ -77,15 +77,15 @@ body {
 }
 
 ::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-	background-color: #3f3f3f;
+  background-color: #3f3f3f;
 }
 ::-webkit-scrollbar-thumb {
-	background-color: #a2a2a2;
-	border-radius: 20px;
+  background-color: #a2a2a2;
+  border-radius: 20px;
 }
 /* 
 .ce-popover-item:hover {
@@ -143,3 +143,19 @@ ol,
 ul {
   @apply dark:text-washed-purple-700;
 } */
+
+p,
+b,
+li,
+ul,
+a,
+span,
+label,
+small,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #fff;
+}

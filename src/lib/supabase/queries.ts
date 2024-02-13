@@ -48,9 +48,8 @@ export const updateFolder = async (
 
 export const updateFile = async (file: any, fileId: string) => {
     try {
-        // eslint-disable-next-line no-unused-vars
         const res = await db.update(files).set(file).where(eq(files.id, fileId))
-        return { data: null, error: null }
+        return { data: res, error: null }
     } catch (error) {
         return { data: null, error: 'Error' }
     }
@@ -86,6 +85,28 @@ export const getPrivateWorkspaces = async (userId: string) => {
         )
         )) as workspace[];
     return privateWorkspaces;
+}
+
+export const getWorkspaceDetails = async (workspaceId: string) => {
+    const isValid = validate(workspaceId)
+    if (!isValid) return { data: [], error: 'Error' }
+    try {
+        const response = await (db.select({
+            id: workspaces.id,
+            createdAt: workspaces.createdAt,
+            workspaceOwner: workspaces.workspaceOwner,
+            title: workspaces.title,
+            iconId: workspaces.iconId,
+            data: workspaces.data,
+            inTrash: workspaces.inTrash,
+            bannerUrl: workspaces.bannerUrl,
+            logo: workspaces.logo,
+            banner: workspaces.banner
+        }).from(workspaces).where(eq(workspaces.id, workspaceId)).limit(1))
+        return { data: response, error: null }
+    } catch (error) {
+        return { data: [], error: 'Error' }
+    }
 }
 
 export const getCollaboratoratingWorkspaces = async (userId: string) => {
