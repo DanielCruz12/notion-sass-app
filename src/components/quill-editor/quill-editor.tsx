@@ -90,6 +90,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       inTrash: dirDetails.inTrash,
       bannerUrl: dirDetails.bannerUrl,
     } as workspace | Folder | File
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, workspaceId, folderId])
 
   const breadCrumbs = useMemo(() => {
