@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-vars */
 'use client'
 
-import dynamic from "next/dynamic"
-import { useCallback, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useAppState } from '@/lib/providers/state-provider'
 import { useSupabaseUser } from '@/lib/providers/supabase-user-provider'
 import { File, Folder, workspace } from '@/lib/supabase/supabase.types'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { usePathname, useRouter } from 'next/navigation'
-
 import 'quill/dist/quill.snow.css'
 
 type QuillEditorProps = {
@@ -37,14 +36,18 @@ var TOOLBAR_OPTIONS = [
   ['clean'], // remove formatting button
 ]
 
-const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails }) => {
+const QuillEditor: React.FC<QuillEditorProps> = ({
+  dirDetails,
+  fileId,
+  dirType,
+}) => {
   const [quill, setQuill] = useState<any>(null)
   const supabase = createClientComponentClient()
   const { state, workspaceId, folderId, dispatch } = useAppState()
+  const pathname = usePathname()
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>()
   const { user } = useSupabaseUser()
   const router = useRouter()
-  const pathName = usePathname()
   const [collaborators, setCollaborators] = useState<
     {
       id: string
@@ -55,7 +58,77 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails }) => {
   const [deletingBanner, setDeletingBanner] = useState(false)
   const [saving, setSaving] = useState(false)
   const [localCursors, setLocalCursors] = useState<any>([])
+
   /* const {socket, isConnected} = useSocket() */
+
+  const details = useMemo(() => {
+    let selectedDir
+    if (dirType === 'file') {
+      selectedDir = state.workspaces
+        .find((workspace) => workspace.id === workspaceId)
+        ?.folders.find((folder) => folder.id === folderId)
+        ?.files.find((file) => file.id === fileId)
+    }
+    if (dirType === 'folder') {
+      selectedDir = state.workspaces
+        .find((workspace) => workspace.id === workspaceId)
+        ?.folders.find((folder) => folder.id === fileId)
+    }
+    if (dirType === 'workspace') {
+      selectedDir = state.workspaces.find(
+        (workspace) => workspace.id === fileId
+      )
+    }
+    if (selectedDir) {
+      return selectedDir
+    }
+    return {
+      title: dirDetails.title,
+      iconId: dirDetails.iconId,
+      createdAt: dirDetails.createdAt,
+      data: dirDetails.data,
+      inTrash: dirDetails.inTrash,
+      bannerUrl: dirDetails.bannerUrl,
+    } as workspace | Folder | File
+  }, [state, workspaceId, folderId])
+
+  const breadCrumbs = useMemo(() => {
+    if (!pathname || !state.workspaces || !workspaceId) return
+    const segments = pathname
+      .split('/')
+      .filter((val) => val !== 'dashboard' && val)
+    const workspaceDetails = state.workspaces.find(
+      (workspace) => workspace.id === workspaceId
+    )
+    const workspaceBreadCrumb = workspaceDetails
+      ? `${workspaceDetails.iconId} ${workspaceDetails.title}`
+      : ''
+    if (segments.length === 1) {
+      return workspaceBreadCrumb
+    }
+
+    const folderSegment = segments[1]
+    const folderDetails = workspaceDetails?.folders.find(
+      (folder) => folder.id === folderSegment
+    )
+    const folderBreadCrumb = folderDetails
+      ? `/ ${folderDetails.iconId} ${folderDetails.title}`
+      : ''
+
+    if (segments.length === 2) {
+      return `${workspaceBreadCrumb} ${folderBreadCrumb}`
+    }
+
+    const fileSegment = segments[2]
+    const fileDetails = folderDetails?.files.find(
+      (file) => file.id === fileSegment
+    )
+    const fileBreadCrumb = fileDetails
+      ? `/ ${fileDetails.iconId} ${fileDetails.title}`
+      : ''
+
+    return `${workspaceBreadCrumb} ${folderBreadCrumb} ${fileBreadCrumb}`
+  }, [state, pathname, workspaceId])
 
   const wrapperRef = useCallback(async (wrapper: any) => {
     if (typeof window !== 'undefined') {
@@ -63,17 +136,12 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails }) => {
       wrapper.innerHTML = ''
       const editor = document.createElement('div')
       wrapper.append(editor)
-      const Quill = (await (import('quill'))).default
-      /*  const QullCursors = (await import('quill-cursors')).default
-      Quill.register('modules/cursors', QullCursors) */
-      const q =  new Quill(editor, {
+      const Quill = (await import('quill')).default;
+      /*  const QuillCursors = (await import('quill-cursors')).default;
+      Quill.register('modules/cursors', QuillCursors); */
+      const q = new Quill(editor, {
         theme: 'snow',
-        modules: {
-          toolbar: TOOLBAR_OPTIONS,
-          cursors: {
-            transformOnTextChange: true,
-          },
-        },
+        modules: { toolbar: TOOLBAR_OPTIONS },
       })
       setQuill(q)
     }
