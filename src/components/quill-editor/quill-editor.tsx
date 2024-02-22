@@ -154,7 +154,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         <div id='container' className='h-screen w-full' ref={wrapperRef}></div>
       </div>
     </>
-  )
+  ) 
 }
 
 export default QuillEditor

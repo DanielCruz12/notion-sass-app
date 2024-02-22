@@ -241,6 +241,17 @@ export const deleteWorkspace = async (workspaceId: string) => {
     await db.delete(workspaces).where(eq(workspaces.id, workspaceId))
 }
 
+export const deleteFile = async (fileId: string) => {
+    if (!fileId) return;
+    await db.delete(files).where(eq(files.id, fileId));
+  };
+  
+  export const deleteFolder = async (folderId: string) => {
+    if (!folderId) return;
+    await db.delete(files).where(eq(files.id, folderId));
+  };
+  
+
 export const createFolder = async (folder: Folder) => {
     try {
         // eslint-disable-next-line no-unused-vars
