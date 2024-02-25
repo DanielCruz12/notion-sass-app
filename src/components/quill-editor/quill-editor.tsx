@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useAppState } from '@/lib/providers/state-provider'
 import { useSupabaseUser } from '@/lib/providers/supabase-user-provider'

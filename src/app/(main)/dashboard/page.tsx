@@ -3,7 +3,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import DashboardSetup from '@/components/dashboard-setup/dashboard-setup'
-import { getUserSuscriptionStatus } from '@/lib/supabase/queries'
+import { getUserSubscriptionStatus } from '@/lib/supabase/queries'
 
 const Dashboard = async () => {
   const supabase = createServerComponentClient({ cookies })
@@ -17,7 +17,7 @@ const Dashboard = async () => {
     where: (workspace, { eq }) => eq(workspace.workspaceOwner, user.id),
   })
   const { data: subscription, error: subscriptionError } =
-    await getUserSuscriptionStatus(user.id)
+    await getUserSubscriptionStatus(user.id)
   if (subscriptionError) return
 
   if (!workspace)

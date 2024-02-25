@@ -3,7 +3,7 @@
 import React from 'react'
 import { cookies } from 'next/headers'
 import {
-  getCollaboratoratingWorkspaces,
+  getCollaboratingWorkspaces,
   getFolders,
   getPrivateWorkspaces,
   getSharedWorkspaces,
@@ -43,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
   const [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces] =
     await Promise.all([
       getPrivateWorkspaces(user.id),
-      getCollaboratoratingWorkspaces(user.id),
+      getCollaboratingWorkspaces(user.id),
       getSharedWorkspaces(user.id),
     ])
 
