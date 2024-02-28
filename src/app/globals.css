@@ -146,3 +146,7 @@ h5 {
 .ql-container.ql-snow {
   border: 1px solid #131313;
 }
+
+.ql-toolbar.ql-snow {
+  border: none;
+}

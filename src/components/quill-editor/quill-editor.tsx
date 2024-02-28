@@ -8,6 +8,18 @@ import { File, Folder, workspace } from '@/lib/supabase/supabase.types'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { usePathname, useRouter } from 'next/navigation'
 import 'quill/dist/quill.snow.css'
+import { XCircleIcon } from 'lucide-react'
+import { Button } from '../ui/button'
+import EmojiPicker from '../global/emoji-picker'
+import Image from 'next/image'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Badge } from '../ui/badge'
 
 type QuillEditorProps = {
   dirType: 'workspace' | 'file' | 'folder'
@@ -89,7 +101,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       inTrash: dirDetails.inTrash,
       bannerUrl: dirDetails.bannerUrl,
     } as workspace | Folder | File
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, workspaceId, folderId])
 
   const breadCrumbs = useMemo(() => {
@@ -136,7 +148,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       wrapper.innerHTML = ''
       const editor = document.createElement('div')
       wrapper.append(editor)
-      const Quill = (await import('quill')).default;
+      const Quill = (await import('quill')).default
       /*  const QuillCursors = (await import('quill-cursors')).default;
       Quill.register('modules/cursors', QuillCursors); */
       const q = new Quill(editor, {
@@ -147,13 +159,248 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     }
   }, [])
 
+  const deleteFileHandler = () => {}
+  const restoreFileHandler = () => {}
+  const iconOnChange = () => {}
+  const deleteBanner = () => {}
+
   return (
-    <>
-      <div className='relative flex flex-col items-center justify-center'>
-        <div id='container' className='h-screen w-full' ref={wrapperRef}></div>
+    <div className=''>
+      <div className='relative max-w-[1000px]'>
+        {details.inTrash && (
+          <article
+            className='z-40 
+        flex 
+        flex-col 
+        flex-wrap  
+        items-center 
+        justify-center 
+        gap-4 
+        bg-[#EB5757] 
+        py-2 
+        md:flex-row'
+          >
+            <div
+              className='flex 
+          flex-col 
+          items-center 
+          justify-center 
+          gap-2 
+          md:flex-row'
+            >
+              <span className='text-white'>
+                This {dirType} is in the trash.
+              </span>
+              <Button
+                size='sm'
+                variant='outline'
+                className='border-white
+              bg-transparent
+              text-white
+              hover:bg-white
+              hover:text-[#EB5757]
+              '
+                onClick={restoreFileHandler}
+              >
+                Restore
+              </Button>
+
+              <Button
+                size='sm'
+                variant='outline'
+                className='border-white
+              bg-transparent
+              text-white
+              hover:bg-white
+              hover:text-[#EB5757]
+              '
+                onClick={deleteFileHandler}
+              >
+                Delete
+              </Button>
+            </div>
+            <span className='text-sm text-white'>{details.inTrash}</span>
+          </article>
+        )}
+        <div
+          className='flex 
+      flex-col-reverse 
+      justify-center 
+      p-8 
+      sm:flex-row 
+      sm:items-center 
+      sm:justify-between 
+      sm:p-2'
+        >
+          <div>{breadCrumbs}</div>
+          <div className='flex items-center gap-4'>
+            <div className='flex h-10 items-center justify-center'>
+              {collaborators?.map((collaborator) => (
+                <TooltipProvider key={collaborator.id}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Avatar
+                        className='
+                  -ml-3 
+                  flex 
+                  h-8 
+                  w-8 
+                  items-center 
+                  justify-center 
+                  rounded-full 
+                  border-2 
+                  border-white 
+                  bg-background
+                  '
+                      >
+                        <AvatarImage
+                          src={
+                            collaborator.avatarUrl ? collaborator.avatarUrl : ''
+                          }
+                          className='rounded-full'
+                        />
+                        <AvatarFallback>
+                          {collaborator.email.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TooltipTrigger>
+                    <TooltipContent>{collaborator.email}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+            </div>
+            {saving ? (
+              <Badge
+                variant='secondary'
+                className='right-4 top-4
+              z-50
+              bg-orange-600
+              text-white
+              '
+              >
+                Saving...
+              </Badge>
+            ) : (
+              <Badge
+                variant='secondary'
+                className='right-4 
+              top-4
+            z-50
+            bg-emerald-600
+            text-white
+            '
+              >
+                Saved
+              </Badge>
+            )}
+          </div>
+        </div>
       </div>
-    </>
-  ) 
+      {details.bannerUrl && (
+        <div className='relative h-[200px] w-full'>
+          <Image
+            src={
+              supabase.storage
+                .from('file-banners')
+                .getPublicUrl(details.bannerUrl).data.publicUrl
+            }
+            fill
+            className='h-20 w-full
+          object-cover
+          md:h-48'
+            alt='Banner Image'
+          />
+        </div>
+      )}
+      <div
+        className='relative
+      mt-2
+      flex
+      flex-col
+      items-center
+      justify-center 
+    '
+      >
+        <div
+          className='flex 
+      w-full 
+      flex-col 
+      self-center
+       px-7 
+       lg:my-8'
+        >
+          <div className='text-[80px]'>
+            <EmojiPicker getValue={iconOnChange}>
+              <div
+                className='flex
+              h-[100px]
+              w-[100px]
+              cursor-pointer
+              items-center
+              justify-center
+              rounded-xl
+              transition-colors
+              hover:bg-muted'
+              >
+                {details.iconId}
+              </div>
+            </EmojiPicker>
+          </div>
+          <div className='flex '>
+            {/* <BannerUpload
+            id={fileId}
+            dirType={dirType}
+            className="mt-2
+            text-sm
+            text-muted-foreground
+            p-2
+            hover:text-card-foreground
+            transition-all
+            rounded-md"
+          >
+            {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
+          </BannerUpload> */}
+            {details.bannerUrl && (
+              <Button
+                disabled={deletingBanner}
+                onClick={deleteBanner}
+                variant='ghost'
+                className='item-center mt-2
+              flex
+              w-36
+              justify-center
+              gap-2
+              rounded-md
+              p-2
+              text-sm
+              text-muted-foreground
+              hover:bg-background'
+              >
+                <XCircleIcon size={16} />
+                <span className='whitespace-nowrap font-normal'>
+                  Remove Banner
+                </span>
+              </Button>
+            )}
+          </div>
+          <span
+            className='
+          h-9
+          text-3xl
+          font-bold
+          text-muted-foreground
+        '
+          >
+            {details.title}
+          </span>
+          <span className='text-sm text-muted-foreground'>
+            {dirType.toUpperCase()}
+          </span>
+        </div>
+        <div id='container' className=' max-w-[1000px] ' ref={wrapperRef}></div>
+      </div>
+    </div>
+  )
 }
 
 export default QuillEditor
