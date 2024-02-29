@@ -20,6 +20,8 @@ import {
 } from '../ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Badge } from '../ui/badge'
+import { ScrollArea } from '../ui/scroll-area'
+import { updateFolder, updateWorkspace } from '@/lib/supabase/queries'
 
 type QuillEditorProps = {
   dirType: 'workspace' | 'file' | 'folder'
@@ -28,7 +30,7 @@ type QuillEditorProps = {
 }
 
 var TOOLBAR_OPTIONS = [
-  ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+  ['bold', 'italic', 'underline', 'strike', 'image', 'video'], // toggled buttons
   ['blockquote', 'code-block'],
 
   [{ header: 1 }, { header: 2 }], // custom button values
@@ -159,13 +161,48 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     }
   }, [])
 
+  const iconOnChange = (icon: string) => {
+    if (!fileId) return
+    if (dirType === 'workspace') {
+      dispatch({
+        type: 'UPDATE_WORKSPACE',
+        payload: { workspace: { iconId: icon }, workspaceId: fileId },
+      })
+      updateWorkspace({ iconId: icon }, fileId)
+    }
+    if (dirType === 'folder') {
+      if (!workspaceId) return
+      dispatch({
+        type: 'UPDATE_FOLDER',
+        payload: {
+          folder: { iconId: icon },
+          workspaceId: workspaceId,
+          folderId: fileId,
+        },
+      })
+      updateFolder({ iconId: icon }, fileId)
+    }
+    if (dirType === 'file') {
+      if (!workspaceId || !folderId) return
+      dispatch({
+        type: 'UPDATE_FILE',
+        payload: {
+          file: { iconId: icon },
+          workspaceId,
+          folderId,
+          fileId,
+        },
+      })
+      updateFolder({ iconId: icon }, fileId)
+    }
+  }
+
   const deleteFileHandler = () => {}
   const restoreFileHandler = () => {}
-  const iconOnChange = () => {}
   const deleteBanner = () => {}
 
   return (
-    <div className=''>
+    <ScrollArea className='h-screen overflow-auto'>
       <div className='relative max-w-[1000px]'>
         {details.inTrash && (
           <article
@@ -399,7 +436,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         </div>
         <div id='container' className=' max-w-[1000px] ' ref={wrapperRef}></div>
       </div>
-    </div>
+    </ScrollArea>
   )
 }
 
