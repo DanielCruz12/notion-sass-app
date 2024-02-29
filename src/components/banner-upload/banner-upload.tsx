@@ -1,7 +1,33 @@
-import React from 'react'
+import CustomDialogTrigger from '../global/custom-dialog-trigger';
+import BannerUploadForm from './banner-upload-form';
 
-const BannerUpload = () => {
-  return <div>BannerUpload</div>
+interface BannerUploadProps {
+  children: React.ReactNode;
+  className?: string;
+  dirType: 'workspace' | 'file' | 'folder';
+  id: string;
 }
 
-export default BannerUpload
+const BannerUpload: React.FC<BannerUploadProps> = ({
+  id,
+  dirType,
+  children,
+  className,
+}) => {
+  return (
+    <CustomDialogTrigger
+      header="Upload Banner"
+      content={
+        <BannerUploadForm
+          dirType={dirType}
+          id={id}
+        />
+      }
+      className={className}
+    >
+      {children}
+    </CustomDialogTrigger>
+  );
+};
+
+export default BannerUpload;

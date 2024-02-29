@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Badge } from '../ui/badge'
 import { ScrollArea } from '../ui/scroll-area'
 import { updateFolder, updateWorkspace } from '@/lib/supabase/queries'
+import BannerUpload from '../banner-upload/banner-upload'
 
 type QuillEditorProps = {
   dirType: 'workspace' | 'file' | 'folder'
@@ -384,19 +385,19 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
             </EmojiPicker>
           </div>
           <div className='flex '>
-            {/* <BannerUpload
-            id={fileId}
-            dirType={dirType}
-            className="mt-2
+            <BannerUpload
+              id={fileId}
+              dirType={dirType}
+              className='mt-2
+            rounded-md
+            p-2
             text-sm
             text-muted-foreground
-            p-2
-            hover:text-card-foreground
             transition-all
-            rounded-md"
-          >
-            {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
-          </BannerUpload> */}
+            hover:text-card-foreground'
+            >
+              {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
+            </BannerUpload>
             {details.bannerUrl && (
               <Button
                 disabled={deletingBanner}

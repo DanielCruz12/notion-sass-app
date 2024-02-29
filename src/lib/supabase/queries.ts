@@ -23,15 +23,15 @@ export const deleteWorkspace = async (workspaceId: string) => {
 
 export const getUserSubscriptionStatus = async (userId: string) => {
     try {
-      const data = await db.query.subscriptions.findFirst({
-          where: (s, { eq }) => eq(s.userId, userId),
-      });
-      if (data) return { data: data as Subscription, error: null };
-      else return { data: null, error: null };
-  } catch (error) {
-      console.log(error);
-      return { data: null, error: `Error` };
-  }
+        const data = await db.query.subscriptions.findFirst({
+            where: (s, { eq }) => eq(s.userId, userId),
+        });
+        if (data) return { data: data as Subscription, error: null };
+        else return { data: null, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: null, error: `Error` };
+    }
 };
 
 export const getFolders = async (workspaceId: string) => {
@@ -43,15 +43,15 @@ export const getFolders = async (workspaceId: string) => {
         };
 
     try {
-      const results: Folder[] | [] = await db
-          .select()
-          .from(folders)
-          .orderBy(folders.createdAt)
-          .where(eq(folders.workspaceId, workspaceId));
-      return { data: results, error: null };
-  } catch (error) {
-      return { data: null, error: 'Error' };
-  }
+        const results: Folder[] | [] = await db
+            .select()
+            .from(folders)
+            .orderBy(folders.createdAt)
+            .where(eq(folders.workspaceId, workspaceId));
+        return { data: results, error: null };
+    } catch (error) {
+        return { data: null, error: 'Error' };
+    }
 };
 
 export const getWorkspaceDetails = async (workspaceId: string) => {
@@ -63,16 +63,16 @@ export const getWorkspaceDetails = async (workspaceId: string) => {
         };
 
     try {
-      const response = (await db
-          .select()
-          .from(workspaces)
-          .where(eq(workspaces.id, workspaceId))
-          .limit(1)) as workspace[];
-      return { data: response, error: null };
-  } catch (error) {
-      console.log(error);
-      return { data: [], error: 'Error' };
-  }
+        const response = (await db
+            .select()
+            .from(workspaces)
+            .where(eq(workspaces.id, workspaceId))
+            .limit(1)) as workspace[];
+        return { data: response, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: [], error: 'Error' };
+    }
 };
 
 export const getFileDetails = async (fileId: string) => {
@@ -82,16 +82,16 @@ export const getFileDetails = async (fileId: string) => {
         error: 'Error';
     }
     try {
-      const response = (await db
-          .select()
-          .from(files)
-          .where(eq(files.id, fileId))
-          .limit(1)) as File[];
-      return { data: response, error: null };
-  } catch (error) {
-      console.log('🔴Error', error);
-      return { data: [], error: 'Error' };
-  }
+        const response = (await db
+            .select()
+            .from(files)
+            .where(eq(files.id, fileId))
+            .limit(1)) as File[];
+        return { data: response, error: null };
+    } catch (error) {
+        console.log('🔴Error', error);
+        return { data: [], error: 'Error' };
+    }
 };
 
 export const deleteFile = async (fileId: string) => {
@@ -109,19 +109,19 @@ export const getFolderDetails = async (folderId: string) => {
     if (!isValid) {
         data: [];
         error: 'Error';
-  }
+    }
 
     try {
-      const response = (await db
-          .select()
-          .from(folders)
-          .where(eq(folders.id, folderId))
-          .limit(1)) as Folder[];
+        const response = (await db
+            .select()
+            .from(folders)
+            .where(eq(folders.id, folderId))
+            .limit(1)) as Folder[];
 
-      return { data: response, error: null };
-  } catch (error) {
-      return { data: [], error: 'Error' };
-  }
+        return { data: response, error: null };
+    } catch (error) {
+        return { data: [], error: 'Error' };
+    }
 };
 
 export const getPrivateWorkspaces = async (userId: string) => {
@@ -137,19 +137,19 @@ export const getPrivateWorkspaces = async (userId: string) => {
             inTrash: workspaces.inTrash,
             logo: workspaces.logo,
             bannerUrl: workspaces.bannerUrl,
-    })
-      .from(workspaces)
-      .where(
-          and(
-              notExists(
-                  db
-                      .select()
-            .from(collaborators)
-                .where(eq(collaborators.workspaceId, workspaces.id))
-        ),
-          eq(workspaces.workspaceOwner, userId)
-      )
-    )) as workspace[];
+        })
+        .from(workspaces)
+        .where(
+            and(
+                notExists(
+                    db
+                        .select()
+                        .from(collaborators)
+                        .where(eq(collaborators.workspaceId, workspaces.id))
+                ),
+                eq(workspaces.workspaceOwner, userId)
+            )
+        )) as workspace[];
     return privateWorkspaces;
 };
 
@@ -164,12 +164,12 @@ export const getCollaboratingWorkspaces = async (userId: string) => {
             iconId: workspaces.iconId,
             data: workspaces.data,
             inTrash: workspaces.inTrash,
-        logo: workspaces.logo,
-        bannerUrl: workspaces.bannerUrl,
-    })
-      .from(users)
-      .innerJoin(collaborators, eq(users.id, collaborators.userId))
-      .innerJoin(workspaces, eq(collaborators.workspaceId, workspaces.id))
+            logo: workspaces.logo,
+            bannerUrl: workspaces.bannerUrl,
+        })
+        .from(users)
+        .innerJoin(collaborators, eq(users.id, collaborators.userId))
+        .innerJoin(workspaces, eq(collaborators.workspaceId, workspaces.id))
         .where(eq(users.id, userId))) as workspace[];
     return collaboratedWorkspaces;
 };
@@ -186,11 +186,11 @@ export const getSharedWorkspaces = async (userId: string) => {
             data: workspaces.data,
             inTrash: workspaces.inTrash,
             logo: workspaces.logo,
-        bannerUrl: workspaces.bannerUrl,
-    })
-      .from(workspaces)
-      .orderBy(workspaces.createdAt)
-      .innerJoin(collaborators, eq(workspaces.id, collaborators.workspaceId))
+            bannerUrl: workspaces.bannerUrl,
+        })
+        .from(workspaces)
+        .orderBy(workspaces.createdAt)
+        .innerJoin(collaborators, eq(workspaces.id, collaborators.workspaceId))
         .where(eq(workspaces.workspaceOwner, userId))) as workspace[];
     return sharedWorkspaces;
 };
@@ -255,12 +255,12 @@ export const getActiveProductsWithPrice = async () => {
         const res = await db.query.products.findMany({
             where: (pro, { eq }) => eq(pro.active, true),
 
-        with: {
-            prices: {
-                where: (pri: { active: any; }, { eq }: any) => eq(pri.active, true),
+            with: {
+                prices: {
+                    where: (pri: { active: any; }, { eq }: any) => eq(pri.active, true),
+                },
             },
-        },
-    });
+        });
         if (res.length) return { data: res, error: null };
         return { data: [], error: null };
     } catch (error) {
@@ -284,9 +284,9 @@ export const createFile = async (file: File) => {
         await db.insert(files).values(file);
         return { data: null, error: null };
     } catch (error) {
-      console.log(error);
-      return { data: null, error: 'Error' };
-  }
+        console.log(error);
+        return { data: null, error: 'Error' };
+    }
 };
 
 export const updateFolder = async (
@@ -294,25 +294,25 @@ export const updateFolder = async (
     folderId: string
 ) => {
     try {
-      await db.update(folders).set(folder).where(eq(folders.id, folderId));
-      return { data: null, error: null };
-  } catch (error) {
-      console.log(error);
-      return { data: null, error: 'Error' };
-  }
+        await db.update(folders).set(folder).where(eq(folders.id, folderId));
+        return { data: null, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: null, error: 'Error' };
+    }
 };
 
 export const updateFile = async (file: Partial<File>, fileId: string) => {
     try {
-      const response = await db
-          .update(files)
-          .set(file)
-          .where(eq(files.id, fileId));
-      return { data: response, error: null };
-  } catch (error) {
-      console.log(error);
-      return { data: null, error: 'Error' };
-  }
+        const response = await db
+            .update(files)
+            .set(file)
+            .where(eq(files.id, fileId));
+        return { data: response, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: null, error: 'Error' };
+    }
 };
 
 export const updateWorkspace = async (
@@ -321,15 +321,15 @@ export const updateWorkspace = async (
 ) => {
     if (!workspaceId) return;
     try {
-      await db
-          .update(workspaces)
-          .set(workspace)
-          .where(eq(workspaces.id, workspaceId));
-      return { data: null, error: null };
-  } catch (error) {
-      console.log(error);
-      return { data: null, error: 'Error' };
-  }
+        await db
+            .update(workspaces)
+            .set(workspace)
+            .where(eq(workspaces.id, workspaceId));
+        return { data: null, error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: null, error: 'Error' };
+    }
 };
 
 export const getCollaborators = async (workspaceId: string) => {

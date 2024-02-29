@@ -9,3 +9,7 @@ export const CreateWorkspaceFormSchema = z.object({
   workspaceName: z.string().describe('Workspace name').min(1, 'minimun of one character'),
   logo: z.any()
 })
+
+export const UploadBannerFormSchema = z.object({
+  banner: z.string().describe('Banner Image'),
+});
