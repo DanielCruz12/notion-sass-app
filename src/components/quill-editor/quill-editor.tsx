@@ -335,7 +335,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         </div>
       </div>
       {details.bannerUrl && (
-        <div className='relative h-[200px] w-full'>
+        <div className='relative h-[200px] w-full text-white transition-all hover:opacity-50'>
           <Image
             src={
               supabase.storage
@@ -343,11 +343,17 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
                 .getPublicUrl(details.bannerUrl).data.publicUrl
             }
             fill
-            className='h-20 w-full
-          object-cover
-          md:h-48'
+            className='h-20 w-full object-cover transition-opacity duration-300 hover:cursor-pointer md:h-48'
             alt='Banner Image'
           />
+
+          <BannerUpload
+            id={fileId}
+            dirType={dirType}
+            className='absolute z-50 mt-2 top-0 h-20 w-full rounded-md p-2 text-sm text-white transition-all md:h-48'
+          >
+            {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
+          </BannerUpload>
         </div>
       )}
       <div
@@ -362,16 +368,17 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         <div
           className='flex 
       w-full 
-      flex-col 
+      flex-row 
       self-center
        px-7 
        lg:my-8'
         >
-          <div className='text-[80px]'>
-            <EmojiPicker getValue={iconOnChange}>
-              <div
-                className='flex
-              h-[100px]
+          <div className='flex w-full flex-row'>
+            <div className='text-[60px]'>
+              <EmojiPicker getValue={iconOnChange}>
+                <div
+                  className='flex
+             
               w-[100px]
               cursor-pointer
               items-center
@@ -379,61 +386,52 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
               rounded-xl
               transition-colors
               hover:bg-muted'
-              >
-                {details.iconId}
-              </div>
-            </EmojiPicker>
+                >
+                  {details.iconId}
+                </div>
+              </EmojiPicker>
+            </div>
+
+            <span
+              className='
+          pt-3
+          text-3xl
+          font-bold
+          text-muted-foreground
+        '
+            >
+              {details.title}
+            </span>
           </div>
-          <div className='flex '>
+
+          {!details.bannerUrl ? (
             <BannerUpload
               id={fileId}
               dirType={dirType}
-              className='mt-2
-            rounded-md
-            p-2
-            text-sm
-            text-muted-foreground
-            transition-all
-            hover:text-card-foreground'
+              className='absolute z-50 mt-2 h-20 w-full rounded-md p-2 text-sm transition-all hover:text-white md:h-48'
             >
-              {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
+              {'Add Banner'}
             </BannerUpload>
+          ) : null}
+
+          <div>
             {details.bannerUrl && (
               <Button
                 disabled={deletingBanner}
                 onClick={deleteBanner}
                 variant='ghost'
-                className='item-center mt-2
-              flex
-              w-36
-              justify-center
+                className=' 
               gap-2
               rounded-md
-              p-2
               text-sm
               text-muted-foreground
               hover:bg-background'
               >
                 <XCircleIcon size={16} />
-                <span className='whitespace-nowrap font-normal'>
-                  Remove Banner
-                </span>
+                <span className='font-normal'>Remove Banner</span>
               </Button>
             )}
           </div>
-          <span
-            className='
-          h-9
-          text-3xl
-          font-bold
-          text-muted-foreground
-        '
-          >
-            {details.title}
-          </span>
-          <span className='text-sm text-muted-foreground'>
-            {dirType.toUpperCase()}
-          </span>
         </div>
         <div id='container' className=' max-w-[1000px] ' ref={wrapperRef}></div>
       </div>

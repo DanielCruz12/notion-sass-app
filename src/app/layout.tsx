@@ -4,8 +4,9 @@ import { DM_Sans } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
 import AppStateProvider from '@/lib/providers/state-provider'
 import { SupabaseUserProvider } from '@/lib/providers/supabase-user-provider'
-import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import './globals.css'
 
 const inter = DM_Sans({ subsets: ['latin'] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <AppStateProvider>
             <SupabaseUserProvider>
               {children}
+              <SpeedInsights/> 
               <Toaster />
             </SupabaseUserProvider>
           </AppStateProvider>
