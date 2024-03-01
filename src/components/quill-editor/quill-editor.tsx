@@ -21,7 +21,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Badge } from '../ui/badge'
 import { ScrollArea } from '../ui/scroll-area'
-import { updateFolder, updateWorkspace } from '@/lib/supabase/queries'
+import {
+  deleteFile,
+  deleteFolder,
+  updateFile,
+  updateFolder,
+  updateWorkspace,
+} from '@/lib/supabase/queries'
 import BannerUpload from '../banner-upload/banner-upload'
 
 type QuillEditorProps = {
@@ -198,9 +204,78 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     }
   }
 
-  const deleteFileHandler = () => {}
-  const restoreFileHandler = () => {}
-  const deleteBanner = () => {}
+  const deleteFileHandler = async () => {
+    if (dirType === 'file') {
+      if (!folderId || !workspaceId) return
+      dispatch({
+        type: 'DELETE_FILE',
+        payload: { fileId, folderId, workspaceId },
+      })
+      await deleteFile(fileId)
+      router.replace(`/dashboard/${workspaceId}`)
+    }
+    if (dirType === 'folder') {
+      if (!workspaceId) return
+      dispatch({
+        type: 'DELETE_FOLDER',
+        payload: { folderId: fileId, workspaceId },
+      })
+      await deleteFolder(fileId)
+      router.replace(`/dashboard/${workspaceId}`)
+    }
+  }
+  const restoreFileHandler = async () => {
+    if (dirType === 'file') {
+      if (!folderId || !workspaceId) return
+      dispatch({
+        type: 'UPDATE_FILE',
+        payload: { file: { inTrash: '' }, fileId, folderId, workspaceId },
+      })
+      await updateFile({ inTrash: '' }, fileId)
+    }
+    if (dirType === 'folder') {
+      if (!workspaceId) return
+      dispatch({
+        type: 'UPDATE_FOLDER',
+        payload: { folder: { inTrash: '' }, folderId: fileId, workspaceId },
+      })
+      await updateFolder({ inTrash: '' }, fileId)
+    }
+  }
+  const deleteBanner = async () => {
+    if (!fileId) return
+    setDeletingBanner(true)
+    if (dirType === 'file') {
+      if (!folderId || !workspaceId) return
+      dispatch({
+        type: 'UPDATE_FILE',
+        payload: { file: { bannerUrl: '' }, fileId, folderId, workspaceId },
+      })
+      await supabase.storage.from('file-banners').remove([`banner-${fileId}`])
+      await updateFile({ bannerUrl: '' }, fileId)
+    }
+    if (dirType === 'folder') {
+      if (!workspaceId) return
+      dispatch({
+        type: 'UPDATE_FOLDER',
+        payload: { folder: { bannerUrl: '' }, folderId: fileId, workspaceId },
+      })
+      await supabase.storage.from('file-banners').remove([`banner-${fileId}`])
+      await updateFolder({ bannerUrl: '' }, fileId)
+    }
+    if (dirType === 'workspace') {
+      dispatch({
+        type: 'UPDATE_WORKSPACE',
+        payload: {
+          workspace: { bannerUrl: '' },
+          workspaceId: fileId,
+        },
+      })
+      await supabase.storage.from('file-banners').remove([`banner-${fileId}`])
+      await updateWorkspace({ bannerUrl: '' }, fileId)
+    }
+    setDeletingBanner(false)
+  }
 
   return (
     <ScrollArea className='h-screen overflow-auto'>
@@ -350,7 +425,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
           <BannerUpload
             id={fileId}
             dirType={dirType}
-            className='absolute z-50 mt-2 top-0 h-20 w-full rounded-md p-2 text-sm text-white transition-all md:h-48'
+            className='absolute top-0 z-50 mt-2 h-20 w-full rounded-md p-2 text-sm text-white transition-all md:h-48'
           >
             {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
           </BannerUpload>
