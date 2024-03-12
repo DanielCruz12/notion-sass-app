@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 'use client'
 
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAppState } from '@/lib/providers/state-provider'
 import { useSupabaseUser } from '@/lib/providers/supabase-user-provider'
 import { File, Folder, workspace } from '@/lib/supabase/supabase.types'
@@ -24,11 +24,15 @@ import { ScrollArea } from '../ui/scroll-area'
 import {
   deleteFile,
   deleteFolder,
+  getFileDetails,
+  getFolderDetails,
+  getWorkspaceDetails,
   updateFile,
   updateFolder,
   updateWorkspace,
 } from '@/lib/supabase/queries'
 import BannerUpload from '../banner-upload/banner-upload'
+import { useSocket } from '@/lib/providers/socket-provider'
 
 type QuillEditorProps = {
   dirType: 'workspace' | 'file' | 'folder'
@@ -79,7 +83,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const [saving, setSaving] = useState(false)
   const [localCursors, setLocalCursors] = useState<any>([])
 
-  /* const {socket, isConnected} = useSocket() */
+  const { socket, isConnected } = useSocket()
+  console.log(socket)
 
   const details = useMemo(() => {
     let selectedDir
@@ -276,6 +281,74 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     }
     setDeletingBanner(false)
   }
+
+  useEffect(() => {
+    if (!fileId) return
+    let selectedDir
+    const fetchInformation = async () => {
+      if (dirType === 'file') {
+        const { data: selectedDir, error } = await getFileDetails(fileId)
+        if (error || !selectedDir) {
+          return router.replace('/dashboard')
+        }
+
+        if (!selectedDir[0]) {
+          if (!workspaceId) return
+          return router.replace(`/dashboard/${workspaceId}`)
+        }
+        if (!workspaceId || quill === null) return
+        if (!selectedDir[0].data) return
+        quill.setContents(JSON.parse(selectedDir[0].data || ''))
+        dispatch({
+          type: 'UPDATE_FILE',
+          payload: {
+            file: { data: selectedDir[0].data },
+            fileId,
+            folderId: selectedDir[0].folderId ?? '',
+            workspaceId,
+          },
+        })
+      }
+      if (dirType === 'folder') {
+        const { data: selectedDir, error } = await getFolderDetails(fileId)
+        if (error || !selectedDir) {
+          return router.replace('/dashboard')
+        }
+
+        if (!selectedDir[0]) {
+          router.replace(`/dashboard/${workspaceId}`)
+        }
+        if (quill === null) return
+        if (!selectedDir[0].data) return
+        quill.setContents(JSON.parse(selectedDir[0].data || ''))
+        dispatch({
+          type: 'UPDATE_FOLDER',
+          payload: {
+            folderId: fileId,
+            folder: { data: selectedDir[0].data },
+            workspaceId: selectedDir[0].workspaceId,
+          },
+        })
+      }
+      if (dirType === 'workspace') {
+        const { data: selectedDir, error } = await getWorkspaceDetails(fileId)
+        if (error || !selectedDir) {
+          return router.replace('/dashboard')
+        }
+        if (!selectedDir[0] || quill === null) return
+        if (!selectedDir[0].data) return
+        quill.setContents(JSON.parse(selectedDir[0].data || ''))
+        dispatch({
+          type: 'UPDATE_WORKSPACE',
+          payload: {
+            workspace: { data: selectedDir[0].data },
+            workspaceId: fileId,
+          },
+        })
+      }
+    }
+    fetchInformation()
+  }, [fileId, workspaceId, quill, dirType])
 
   return (
     <ScrollArea className='h-screen overflow-auto'>

@@ -4,7 +4,13 @@ const nextConfig = {
     serverActions: true,
   },
   images: {
-    domains: ['vtqahdoukfytmosthbyu.supabase.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'vtqahdoukfytmosthbyu.supabase.co',
+        port: '',
+      },
+    ],
   },
 }
 
