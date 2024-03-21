@@ -327,7 +327,6 @@ export const updateWorkspace = async (
             .where(eq(workspaces.id, workspaceId));
         return { data: null, error: null };
     } catch (error) {
-        console.log(error);
         return { data: null, error: 'Error' };
     }
 };

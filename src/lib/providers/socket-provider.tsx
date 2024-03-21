@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -32,6 +31,7 @@ export const SocketProvider = ({ children }: { children: any }) => {
     socketInstance.on('disconnect', () => {
       setIsConnected(false)
     })
+    setSocket(socketInstance)
     return () => {
       socketInstance.disconnect()
     }
