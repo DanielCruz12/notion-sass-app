@@ -53,8 +53,6 @@ body {
   }
 }
 
-
-
 .animate-slide {
   animation: 15s slide linear infinite;
 }
@@ -148,4 +146,16 @@ h5 {
 
 .ql-toolbar.ql-snow {
   border: 0px;
+}
+
+.border {
+  border-width: none;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: none;
+  border-color: none;
 }

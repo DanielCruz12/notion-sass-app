@@ -30,7 +30,7 @@ export const SupabaseUserProvider: React.FC<SupabaseUserProviderProps> = ({
 }) => {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [subscription, setSubscription] = useState<Subscription | null>(null)
-  const {toast} = useToast()
+  const { toast } = useToast()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const SupabaseUserProvider: React.FC<SupabaseUserProviderProps> = ({
           toast({
             title: 'Unexpected Error',
             description:
-              'Oppse! An unexpected error happened. Try again later.',
+              'Opps! An unexpected error happened. Try again later.',
           })
         }
       }

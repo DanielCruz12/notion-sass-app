@@ -288,12 +288,9 @@ const SettingsForm = () => {
               </span>
               <ScrollArea
                 className='
-            h-[120px]
             w-full
-            overflow-y-scroll
             rounded-md
-            border
-            border-muted-foreground/20'
+           '
               >
                 {collaborators.length ? (
                   collaborators.map((c) => (
